@@ -21,7 +21,22 @@
 
 ---
 
+
+## 🏗️ Architecture
+
+```mermaid
+graph TD
+    User[User Wallet] -->|SIP-010 Transaction| Frontend[Next.js App]
+    Frontend -->|@stacks/connect| Wallet[Leather / Xverse]
+    Wallet -->|Sign & Broadcast| Stacks[Stacks Blockchain]
+    Stacks -->|Execute| Contracts[Clarity Contracts]
+    Contracts -->|Store State| ChainState[On-chain State]
+    Frontend -->|Read State| API[Stacks API]
+    API -->|Query| ChainState
+```
+
 ## 🏗️ Project Structure
+
 
 ```
 stacksforge/
