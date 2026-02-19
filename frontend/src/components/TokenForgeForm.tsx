@@ -1,21 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useWallet } from '@/contexts/WalletContext';
 import { useToast } from '@/contexts/ToastContext';
 import { useTokenFactory } from '@/hooks/useTokenFactory';
-import { Flame, Loader2, CheckCircle2, ExternalLink, AlertTriangle } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { trackEvent } from '@/lib/analytics';
 import { FormInput } from './FormInput';
+import { Flame, Loader2, CheckCircle2, ExternalLink, AlertTriangle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { validateTokenForm, formatSupply, type TokenFormState } from '@/lib/validation';
 
-interface FormState {
-    name: string;
-    symbol: string;
-    decimals: string;
-    supply: string;
-}
-
-const INITIAL_FORM: FormState = {
+const INITIAL_FORM: TokenFormState = {
     name: '',
     symbol: '',
     decimals: '6',
@@ -24,90 +19,67 @@ const INITIAL_FORM: FormState = {
 
 export function TokenForgeForm() {
     const { connected } = useWallet();
-    const { createToken, loading, txid, error } = useTokenFactory();
+    const { createToken, loading, txid, error: factoryError } = useTokenFactory();
     const { success, error: toastError, info } = useToast();
-    const [form, setForm] = useState<FormState>(INITIAL_FORM);
-    const [touched, setTouched] = useState<Record<keyof FormState, boolean>>({
-        name: false, symbol: false, decimals: false, supply: false
-    });
-    const [errors, setErrors] = useState<Record<keyof FormState, string | undefined>>({});
+    const [form, setForm] = useState<TokenFormState>(INITIAL_FORM);
+    const [touched, setTouched] = useState<Record<string, boolean>>({});
+    const [errors, setErrors] = useState<Record<string, string>>({});
+
+    // Watch for success
+    useEffect(() => {
+        if (txid) {
+            trackEvent('forge_token_success', { txid, name: form.name, symbol: form.symbol });
+        }
+    }, [txid, form.name, form.symbol]);
+
+    // Watch for errors
+    useEffect(() => {
+        if (factoryError) {
+            trackEvent('forge_token_error', { error: factoryError });
+        }
+    }, [factoryError]);
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
         const { name, value } = e.target;
-        let finalValue = value;
+        let newValue = value;
 
+        // Input masking for supply
         if (name === 'supply') {
-            // Auto-format supply with commas
-            const raw = value.replace(/,/g, '');
-            if (/^\d*$/.test(raw)) {
-                finalValue = Number(raw).toLocaleString('en-US');
-                if (finalValue === '0') finalValue = '';
-            } else {
-                // If non-numeric characters are entered, prevent update
-                return;
-            }
+            newValue = formatSupply(value);
         }
         if (name === 'symbol') {
-            finalValue = value.toUpperCase();
+            newValue = value.toUpperCase();
         }
 
-        setForm(prev => ({ ...prev, [name]: finalValue }));
-
-        // Clear error on change if touched (improving UX)
-        if (touched[name as keyof FormState]) {
-            setErrors(prev => ({ ...prev, [name]: undefined }));
-        }
+        setForm(prev => {
+            const up = { ...prev, [name]: newValue };
+            // Real-time validation if touched
+            if (touched[name]) {
+                const { errors: newErrors } = validateTokenForm(up);
+                setErrors(prevErr => ({ ...prevErr, [name]: newErrors[name as keyof TokenFormState] || '' }));
+            }
+            return up;
+        });
     }
 
     function handleBlur(e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) {
-        const { name, value } = e.target;
-        setTouched(prev => ({ ...prev, [name as keyof FormState]: true }));
-        validateField(name as keyof FormState, value);
-    }
-
-    // Helper to validate a single field
-    function validateField(name: keyof FormState, value: string): boolean {
-        let result = { valid: true, error: undefined as string | undefined };
-
-        if (name === 'name') {
-            if (!value.trim()) result = { valid: false, error: 'Token name is required' };
-            else if (value.length > 64) result = { valid: false, error: 'Max 64 characters' };
-        }
-        if (name === 'symbol') {
-            if (!value.trim()) result = { valid: false, error: 'Symbol is required' };
-            else if (value.length > 11) result = { valid: false, error: 'Max 11 characters' };
-        }
-        if (name === 'decimals') {
-            const dec = parseInt(value, 10);
-            if (isNaN(dec) || dec < 0 || dec > 18) {
-                result = { valid: false, error: 'Decimals must be 0–18' };
-            }
-        }
-        if (name === 'supply') {
-            const raw = value.replace(/,/g, '');
-            if (!raw) result = { valid: false, error: 'Supply is required' };
-            else if (BigInt(raw) <= 0n) result = { valid: false, error: 'Supply must be greater than 0' };
-        }
-
-        setErrors(prev => ({ ...prev, [name]: result.error }));
-        return result.valid;
-    }
-
-    function validateAll(): boolean {
-        // trigger validation for all fields
-        const validName = validateField('name', form.name);
-        const validSymbol = validateField('symbol', form.symbol);
-        const validDecimals = validateField('decimals', form.decimals);
-        const validSupply = validateField('supply', form.supply);
-
-        setTouched({ name: true, symbol: true, decimals: true, supply: true });
-
-        return validName && validSymbol && validDecimals && validSupply;
+        const { name } = e.target;
+        setTouched(prev => ({ ...prev, [name]: true }));
+        const { errors: newErrors } = validateTokenForm(form);
+        setErrors(prev => ({ ...prev, [name]: newErrors[name as keyof TokenFormState] || '' }));
     }
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        if (!validateAll()) return;
+        setTouched({ name: true, symbol: true, decimals: true, supply: true });
+
+        const { isValid, errors: validationErrors } = validateTokenForm(form);
+        if (!isValid) {
+            setErrors(validationErrors as Record<string, string>);
+            return;
+        }
+
+        trackEvent('forge_token_start', { name: form.name, symbol: form.symbol });
 
         info('Broadcasting transaction…', 'Please confirm in your Stacks wallet.');
 
@@ -123,8 +95,8 @@ export function TokenForgeForm() {
                 'Token created! 🎉',
                 `${form.name} (${form.symbol}) is now live on Stacks mainnet.`
             );
-        } else if (result?.error || error) {
-            toastError('Transaction failed', result?.error ?? error ?? 'Unknown error');
+        } else if (result?.error || factoryError) {
+            toastError('Transaction failed', result?.error ?? factoryError ?? 'Unknown error');
         }
     }
 
@@ -141,18 +113,24 @@ export function TokenForgeForm() {
                 <p className="success-message">
                     Your SIP-010 token <strong>{form.name}</strong> ({form.symbol}) is now live on Stacks mainnet.
                 </p>
-                <a
-                    className="btn btn-primary"
-                    href={`https://explorer.hiro.so/txid/${txid}?chain=mainnet`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <ExternalLink size={16} />
-                    View on Stacks Explorer
-                </a>
-                <button className="btn btn-outline" onClick={() => window.location.reload()}>
-                    Forge Another Token
-                </button>
+                <div className="flex gap-4 mt-6 justify-center">
+                    <a
+                        className="btn btn-primary"
+                        href={`https://explorer.hiro.so/txid/${txid}?chain=mainnet`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => trackEvent('click_explorer', { txid })}
+                    >
+                        <ExternalLink size={16} />
+                        View on Explorer
+                    </a>
+                    <button
+                        className="btn btn-outline"
+                        onClick={() => window.location.reload()}
+                    >
+                        Forge Another
+                    </button>
+                </div>
             </motion.div>
         );
     }
@@ -164,7 +142,7 @@ export function TokenForgeForm() {
             noValidate
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.5 }}
         >
             <div className="form-header">
                 <Flame size={32} className="flame-icon" />
@@ -184,7 +162,7 @@ export function TokenForgeForm() {
                 required
                 disabled={loading || !connected}
                 charCount={{ current: form.name.length, max: 64 }}
-                error={touched.name && errors.name ? errors.name : undefined}
+                error={errors.name}
             />
 
             <FormInput
@@ -199,7 +177,7 @@ export function TokenForgeForm() {
                 required
                 disabled={loading || !connected}
                 charCount={{ current: form.symbol.length, max: 11 }}
-                error={touched.symbol && errors.symbol ? errors.symbol : undefined}
+                error={errors.symbol}
             />
 
             <div className="form-row">
@@ -211,7 +189,7 @@ export function TokenForgeForm() {
                         value={form.decimals}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        className={`form-input ${errors.decimals && touched.decimals ? 'input-error' : ''}`}
+                        className={`form-input ${errors.decimals ? 'input-error' : ''}`}
                         disabled={loading || !connected}
                     >
                         <option value="0">0</option>
@@ -219,7 +197,7 @@ export function TokenForgeForm() {
                         <option value="8">8</option>
                         <option value="18">18</option>
                     </select>
-                    {errors.decimals && touched.decimals && (
+                    {errors.decimals && (
                         <span className="error-message">
                             <AlertTriangle size={12} /> {errors.decimals}
                         </span>
@@ -237,20 +215,23 @@ export function TokenForgeForm() {
                     onBlur={handleBlur}
                     required
                     disabled={loading || !connected}
-                    error={touched.supply && errors.supply ? errors.supply : undefined}
+                    error={errors.supply}
                 />
             </div>
 
-            {error && (
-                <motion.div
-                    className="error-alert"
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                >
-                    <AlertTriangle size={16} />
-                    {error}
-                </motion.div>
-            )}
+            <AnimatePresence>
+                {(factoryError) && (
+                    <motion.div
+                        className="error-alert"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                    >
+                        <AlertTriangle size={16} />
+                        {factoryError}
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <div className="fee-info">
                 <span>Creation fee:</span>
