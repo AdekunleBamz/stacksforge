@@ -7,7 +7,6 @@ import networkPkg from "@stacks/network";
 const {
     makeContractDeploy,
     broadcastTransaction,
-    AnchorMode,
     ClarityVersion,
     PostConditionMode,
     getAddressFromPrivateKey,
@@ -15,12 +14,12 @@ const {
 } = txPkg;
 
 const { generateWallet } = walletPkg;
-const { STACKS_MAINNET } = networkPkg;
+const { StacksMainnet } = networkPkg;
 
 // ── Config ──────────────────────────────────────────────────────────────────
 const TOML_PATH = "./settings/Mainnet.toml";
-const FEE = 20000;             // 0.02 STX per contract deployment
-const NETWORK = STACKS_MAINNET;
+const FEE = 20000;                // 0.02 STX per contract deployment
+const NETWORK = new StacksMainnet();  // @stacks/network v6 class instance
 const EPOCH = ClarityVersion.Clarity2;
 
 const CONTRACTS = [
@@ -107,7 +106,6 @@ async function main() {
                 senderKey: privateKey,
                 network: NETWORK,
                 fee: FEE,
-                anchorMode: AnchorMode.OnChainOnly,
                 postConditionMode: PostConditionMode.Allow,
                 clarityVersion: contract.clarityVersion,
             });
