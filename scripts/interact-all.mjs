@@ -31,7 +31,7 @@ const WALLETS_PATH = "./internal/test-wallets.json";
 const RESULTS_PATH = "./internal/interact-results.json";
 const NETWORK = new StacksMainnet();
 const GAS_FEE = 1_000;          // 0.001 STX
-const CREATION_FEE_USTX = 1_000_000n;     // 1 STX (must match contract)
+const CREATION_FEE_USTX = 2_000n;         // 0.002 STX (matches set-creation-fee on deployed contract)
 const DELAY_MS = 5_000;          // 5 seconds
 
 // Deployed contract
