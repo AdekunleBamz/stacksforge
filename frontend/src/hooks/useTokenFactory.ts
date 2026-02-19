@@ -167,6 +167,7 @@ export function useTokenFactory() {
         } catch (err: any) {
             const msg = mapError(err);
             setError(msg);
+            trackEvent('forge_token_error', { error: msg, originalError: err.message });
             setLoading(false);
         }
     }, [address, net, getCreationFee]);
