@@ -100,7 +100,26 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+
 ---
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+**1. Wallet connection fails**
+- Ensure you have the [Leather](https://leather.io) or [Xverse](https://www.xverse.app) browser extension installed.
+- Check if you are on the correct network (Mainnet vs Testnet).
+
+**2. Transaction pending for too long**
+- The network might be congested. You can increase the fee in your wallet when signing.
+- Check the [Stacks Explorer](https://explorer.hiro.so) for network status.
+
+**3. "Contract not found" error**
+- Verify the `NEXT_PUBLIC_FACTORY_ADDRESS` in your `.env.local` matches the deployed contract address.
+
+---
+
 
 ## 📡 Stacks Libraries
 
