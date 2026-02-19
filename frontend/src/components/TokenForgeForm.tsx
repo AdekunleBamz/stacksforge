@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { useWallet } from '@/contexts/WalletContext';
 import { useTokenFactory } from '@/hooks/useTokenFactory';
 import { Flame, Loader2, CheckCircle2, ExternalLink, AlertTriangle } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { FormInput } from './FormInput';
 
 interface FormState {
     name: string;
@@ -66,7 +68,12 @@ export function TokenForgeForm() {
 
     if (txid) {
         return (
-            <div className="forge-card success-card">
+            <motion.div
+                className="forge-card success-card"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ type: 'spring', stiffness: 200 }}
+            >
                 <CheckCircle2 size={48} className="success-icon" />
                 <h2>Token Created! 🎉</h2>
                 <p className="success-message">
@@ -84,51 +91,49 @@ export function TokenForgeForm() {
                 <button className="btn btn-outline" onClick={() => window.location.reload()}>
                     Forge Another Token
                 </button>
-            </div>
+            </motion.div>
         );
     }
 
     return (
-        <form className="forge-card" onSubmit={handleSubmit}>
+        <motion.form
+            className="forge-card"
+            onSubmit={handleSubmit}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+        >
             <div className="form-header">
                 <Flame size={32} className="flame-icon" />
                 <h2>Create Your Token</h2>
                 <p>Deploy a SIP-010 fungible token on Stacks mainnet in seconds.</p>
             </div>
 
-            <div className="form-group">
-                <label htmlFor="name">Token Name</label>
-                <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    placeholder="e.g. Galaxy Coin"
-                    value={form.name}
-                    onChange={handleChange}
-                    maxLength={64}
-                    required
-                    className="form-input"
-                    disabled={loading || !connected}
-                />
-                <span className="char-count">{form.name.length}/64</span>
-            </div>
+            <FormInput
+                id="name"
+                name="name"
+                label="Token Name"
+                placeholder="e.g. Galaxy Coin"
+                value={form.name}
+                onChange={handleChange}
+                maxLength={64}
+                required
+                disabled={loading || !connected}
+                charCount={{ current: form.name.length, max: 64 }}
+            />
 
-            <div className="form-group">
-                <label htmlFor="symbol">Symbol</label>
-                <input
-                    id="symbol"
-                    name="symbol"
-                    type="text"
-                    placeholder="e.g. GLXY"
-                    value={form.symbol}
-                    onChange={handleChange}
-                    maxLength={11}
-                    required
-                    className="form-input"
-                    disabled={loading || !connected}
-                />
-                <span className="char-count">{form.symbol.length}/11</span>
-            </div>
+            <FormInput
+                id="symbol"
+                name="symbol"
+                label="Symbol"
+                placeholder="e.g. GLXY"
+                value={form.symbol}
+                onChange={handleChange}
+                maxLength={11}
+                required
+                disabled={loading || !connected}
+                charCount={{ current: form.symbol.length, max: 11 }}
+            />
 
             <div className="form-row">
                 <div className="form-group">
@@ -148,28 +153,29 @@ export function TokenForgeForm() {
                     </select>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="supply">Total Supply</label>
-                    <input
-                        id="supply"
-                        name="supply"
-                        type="number"
-                        placeholder="1000000"
-                        value={form.supply}
-                        onChange={handleChange}
-                        min="1"
-                        required
-                        className="form-input"
-                        disabled={loading || !connected}
-                    />
-                </div>
+                <FormInput
+                    id="supply"
+                    name="supply"
+                    label="Total Supply"
+                    type="number"
+                    placeholder="1000000"
+                    value={form.supply}
+                    onChange={handleChange}
+                    min={1}
+                    required
+                    disabled={loading || !connected}
+                />
             </div>
 
             {(validationError || error) && (
-                <div className="error-alert">
+                <motion.div
+                    className="error-alert"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                >
                     <AlertTriangle size={16} />
                     {validationError || error}
-                </div>
+                </motion.div>
             )}
 
             <div className="fee-info">
@@ -180,19 +186,21 @@ export function TokenForgeForm() {
             {!connected ? (
                 <p className="connect-hint">Connect your Stacks wallet (Leather / Xverse) to forge a token.</p>
             ) : (
-                <button
+                <motion.button
                     type="submit"
                     className="btn btn-primary btn-large"
                     disabled={loading}
                     id="forge-btn"
+                    whileTap={{ scale: 0.98 }}
+                    whileHover={{ scale: 1.02 }}
                 >
                     {loading ? (
                         <><Loader2 size={20} className="spin" /> Confirm in wallet…</>
                     ) : (
                         <><Flame size={20} /> Forge Token</>
                     )}
-                </button>
+                </motion.button>
             )}
-        </form>
+        </motion.form>
     );
 }
