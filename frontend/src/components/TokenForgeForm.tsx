@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useWallet } from '@/contexts/WalletContext';
+import { useToast } from '@/contexts/ToastContext';
 import { useTokenFactory } from '@/hooks/useTokenFactory';
 import { Flame, Loader2, CheckCircle2, ExternalLink, AlertTriangle } from 'lucide-react';
 
@@ -22,6 +23,7 @@ const INITIAL_FORM: FormState = {
 export function TokenForgeForm() {
     const { connected } = useWallet();
     const { createToken, loading, txid, error } = useTokenFactory();
+    const { success, error: toastError, info } = useToast();
     const [form, setForm] = useState<FormState>(INITIAL_FORM);
     const [validationError, setValidationError] = useState<string | null>(null);
 
@@ -56,12 +58,23 @@ export function TokenForgeForm() {
         e.preventDefault();
         if (!validate()) return;
 
-        await createToken({
+        info('Broadcasting transaction…', 'Please confirm in your Stacks wallet.');
+
+        const result = await createToken({
             name: form.name.trim(),
             symbol: form.symbol.trim().toUpperCase(),
             decimals: parseInt(form.decimals, 10),
             supply: BigInt(form.supply.replace(/,/g, '')) * (10n ** BigInt(form.decimals)),
         });
+
+        if (result?.txid) {
+            success(
+                'Token created! 🎉',
+                `${form.name} (${form.symbol}) is now live on Stacks mainnet.`
+            );
+        } else if (result?.error || error) {
+            toastError('Transaction failed', result?.error ?? error ?? 'Unknown error');
+        }
     }
 
     if (txid) {
@@ -174,7 +187,7 @@ export function TokenForgeForm() {
 
             <div className="fee-info">
                 <span>Creation fee:</span>
-                <strong>1 STX</strong>
+                <strong>0.002 STX</strong>
             </div>
 
             {!connected ? (
