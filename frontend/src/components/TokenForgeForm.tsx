@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useWallet } from '@/contexts/WalletContext';
 import { useTokenFactory } from '@/hooks/useTokenFactory';
 import { Flame, Loader2, CheckCircle2, ExternalLink, AlertTriangle } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface FormState {
     name: string;
@@ -66,7 +67,12 @@ export function TokenForgeForm() {
 
     if (txid) {
         return (
-            <div className="forge-card success-card">
+            <motion.div
+                className="forge-card success-card"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ type: 'spring', stiffness: 200 }}
+            >
                 <CheckCircle2 size={48} className="success-icon" />
                 <h2>Token Created! 🎉</h2>
                 <p className="success-message">
@@ -84,12 +90,18 @@ export function TokenForgeForm() {
                 <button className="btn btn-outline" onClick={() => window.location.reload()}>
                     Forge Another Token
                 </button>
-            </div>
+            </motion.div>
         );
     }
 
     return (
-        <form className="forge-card" onSubmit={handleSubmit}>
+        <motion.form
+            className="forge-card"
+            onSubmit={handleSubmit}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+        >
             <div className="form-header">
                 <Flame size={32} className="flame-icon" />
                 <h2>Create Your Token</h2>
@@ -166,10 +178,14 @@ export function TokenForgeForm() {
             </div>
 
             {(validationError || error) && (
-                <div className="error-alert">
+                <motion.div
+                    className="error-alert"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                >
                     <AlertTriangle size={16} />
                     {validationError || error}
-                </div>
+                </motion.div>
             )}
 
             <div className="fee-info">
@@ -180,19 +196,21 @@ export function TokenForgeForm() {
             {!connected ? (
                 <p className="connect-hint">Connect your Stacks wallet (Leather / Xverse) to forge a token.</p>
             ) : (
-                <button
+                <motion.button
                     type="submit"
                     className="btn btn-primary btn-large"
                     disabled={loading}
                     id="forge-btn"
+                    whileTap={{ scale: 0.98 }}
+                    whileHover={{ scale: 1.02 }}
                 >
                     {loading ? (
                         <><Loader2 size={20} className="spin" /> Confirm in wallet…</>
                     ) : (
                         <><Flame size={20} /> Forge Token</>
                     )}
-                </button>
+                </motion.button>
             )}
-        </form>
+        </motion.form>
     );
 }
