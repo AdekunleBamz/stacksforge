@@ -1,1 +1,0 @@
-# Scripts\n\nDeployment and interaction scripts using `@stacks/transactions`.\n\n## Setup\n```bash\nnpm install\ncp .env.example .env\n# Fill in DEPLOYER_PRIVATE_KEY\n```\n\n## Commands\n- `npm run deploy` — Deploy all contracts to Stacks mainnet\n- `npm run verify` — Verify deployment\n- `npm run interact` — Example create-token call\n
