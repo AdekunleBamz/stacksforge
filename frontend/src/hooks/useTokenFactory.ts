@@ -162,7 +162,8 @@ export function useTokenFactory() {
 
             await openContractCall(options);
         } catch (err: any) {
-            setError(err.message ?? 'Unknown error');
+            const msg = mapError(err);
+            setError(msg);
             setLoading(false);
         }
     }, [address, net, getCreationFee]);
