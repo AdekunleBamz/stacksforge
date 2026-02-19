@@ -16,20 +16,37 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-    title: 'StacksForge — Forge SIP-010 Tokens on Stacks',
+    metadataBase: new URL('https://stacksforge.xyz'),
+    title: {
+        default: 'StacksForge — Forge SIP-010 Tokens on Stacks',
+        template: '%s | StacksForge',
+    },
     description: 'Create and deploy SIP-010 fungible tokens on Stacks mainnet in seconds. No coding required — just connect your wallet and forge.',
-    keywords: ['Stacks', 'STX', 'SIP-010', 'token', 'fungible token', 'blockchain', 'StacksForge'],
+    keywords: ['Stacks', 'STX', 'SIP-010', 'token generator', 'fungible token', 'blockchain', 'crypto', 'no-code'],
+    authors: [{ name: 'StacksForge Team' }],
+    creator: 'StacksForge',
     openGraph: {
-        title: 'StacksForge',
+        title: 'StacksForge — No-Code Token Generator',
         description: 'Deploy SIP-010 tokens on Stacks mainnet with one click.',
         url: 'https://stacksforge.xyz',
         siteName: 'StacksForge',
+        locale: 'en_US',
         type: 'website',
     },
     twitter: {
         card: 'summary_large_image',
         title: 'StacksForge',
+        description: 'Deploy SIP-010 tokens on Stacks mainnet in seconds.',
         creator: '@StacksForge',
+    },
+    viewport: {
+        width: 'device-width',
+        initialScale: 1,
+        maximumScale: 1,
+    },
+    robots: {
+        index: true,
+        follow: true,
     },
 };
 
@@ -39,7 +56,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="en" className={inter.variable}>
+        <html lang="en" className={inter.variable} suppressHydrationWarning>
             <head>
                 <link rel="icon" href="/favicon.ico" />
             </head>
