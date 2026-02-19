@@ -3,6 +3,10 @@ export interface ValidationResult {
     error?: string;
 }
 
+/**
+ * Form validation rules for the Token Forge.
+ * Each validator returns a ValidationResult object.
+ */
 export const validators = {
     name: (value: string): ValidationResult => {
         if (!value.trim()) return { valid: false, error: 'Token name is required' };
