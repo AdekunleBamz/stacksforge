@@ -1,8 +1,8 @@
-'use client';
-
+// Replace Loader2 with Skeleton import
 import { useEffect, useState } from 'react';
 import { useTokenFactory, TokenInfo } from '@/hooks/useTokenFactory';
-import { ExternalLink, Loader2, Coins } from 'lucide-react';
+import { ExternalLink, Coins } from 'lucide-react';
+import { Skeleton } from '@/components/Skeleton';
 
 export function TokenList() {
     const { getTokenCount, getTokenById } = useTokenFactory();
@@ -26,6 +26,9 @@ export function TokenList() {
             } catch (e) {
                 console.error('Failed to load tokens', e);
             } finally {
+
+                // Keep showing skeletons for a tiny bit longer to prevent layout thrashing if fast
+                // or just set loading false immediately
                 setLoading(false);
             }
         }
@@ -34,9 +37,27 @@ export function TokenList() {
 
     if (loading) {
         return (
-            <div className="token-list-loading">
-                <Loader2 size={32} className="spin" />
-                <p>Loading tokens from Stacks mainnet…</p>
+            <div className="token-list">
+                <div className="token-list-header">
+                    <h2>All Tokens</h2>
+                    <Skeleton width={80} height={24} className="badge-skeleton" style={{ borderRadius: 999 }} />
+                </div>
+                <div className="token-grid">
+                    {[...Array(4)].map((_, i) => (
+                        <div key={i} className="token-card">
+                            <Skeleton variant="rectangular" width={44} height={44} style={{ borderRadius: 12 }} />
+                            <div className="token-info" style={{ width: '100%' }}>
+                                <Skeleton width="60%" height={20} style={{ marginBottom: 4 }} />
+                                <Skeleton width="30%" height={16} />
+                            </div>
+                            <div className="token-meta" style={{ width: '100%', marginTop: 'auto' }}>
+                                <Skeleton width="80%" height={14} />
+                                <Skeleton width="50%" height={14} />
+                                <Skeleton width="40%" height={14} style={{ marginTop: 4 }} />
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
         );
     }
