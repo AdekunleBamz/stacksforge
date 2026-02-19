@@ -1,0 +1,9 @@
+# settings/Mainnet.toml
+# Used by deploy-mainnet.mjs to load the deployer wallet
+# DO NOT COMMIT THIS FILE — it is in .gitignore
+
+[deployer]
+mnemonic = "your twelve word mnemonic phrase goes here and never commit this file"
+
+# Address that receives token creation fees (defaults to deployer if not set)
+fee_recipient = "SP_YOUR_FEE_RECIPIENT_ADDRESS_HERE"
