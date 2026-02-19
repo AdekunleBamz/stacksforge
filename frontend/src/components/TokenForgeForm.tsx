@@ -17,7 +17,7 @@ const INITIAL_FORM: FormState = {
     name: '',
     symbol: '',
     decimals: '6',
-    supply: '1000000',
+    supply: '1,000,000', // Formatted initial supply
 };
 
 export function TokenForgeForm() {
@@ -25,38 +25,87 @@ export function TokenForgeForm() {
     const { createToken, loading, txid, error } = useTokenFactory();
     const { success, error: toastError, info } = useToast();
     const [form, setForm] = useState<FormState>(INITIAL_FORM);
-    const [validationError, setValidationError] = useState<string | null>(null);
+    const [touched, setTouched] = useState<Record<keyof FormState, boolean>>({
+        name: false, symbol: false, decimals: false, supply: false
+    });
+    const [errors, setErrors] = useState<Record<keyof FormState, string | undefined>>({});
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
-        setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
-        setValidationError(null);
+        const { name, value } = e.target;
+        let finalValue = value;
+
+        if (name === 'supply') {
+            // Auto-format supply with commas
+            const raw = value.replace(/,/g, '');
+            if (/^\d*$/.test(raw)) {
+                finalValue = Number(raw).toLocaleString('en-US');
+                if (finalValue === '0') finalValue = '';
+            } else {
+                // If non-numeric characters are entered, prevent update
+                return;
+            }
+        }
+        if (name === 'symbol') {
+            finalValue = value.toUpperCase();
+        }
+
+        setForm(prev => ({ ...prev, [name]: finalValue }));
+
+        // Clear error on change if touched (improving UX)
+        if (touched[name as keyof FormState]) {
+            setErrors(prev => ({ ...prev, [name]: undefined }));
+        }
     }
 
-    function validate(): boolean {
-        if (!form.name.trim() || form.name.length > 64) {
-            setValidationError('Token name must be 1–64 characters.');
-            return false;
+    function handleBlur(e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) {
+        const { name, value } = e.target;
+        setTouched(prev => ({ ...prev, [name as keyof FormState]: true }));
+        validateField(name as keyof FormState, value);
+    }
+
+    // Helper to validate a single field
+    function validateField(name: keyof FormState, value: string): boolean {
+        let result = { valid: true, error: undefined as string | undefined };
+
+        if (name === 'name') {
+            if (!value.trim()) result = { valid: false, error: 'Token name is required' };
+            else if (value.length > 64) result = { valid: false, error: 'Max 64 characters' };
         }
-        if (!form.symbol.trim() || form.symbol.length > 11) {
-            setValidationError('Symbol must be 1–11 characters.');
-            return false;
+        if (name === 'symbol') {
+            if (!value.trim()) result = { valid: false, error: 'Symbol is required' };
+            else if (value.length > 11) result = { valid: false, error: 'Max 11 characters' };
         }
-        const dec = parseInt(form.decimals, 10);
-        if (isNaN(dec) || dec < 0 || dec > 18) {
-            setValidationError('Decimals must be 0–18.');
-            return false;
+        if (name === 'decimals') {
+            const dec = parseInt(value, 10);
+            if (isNaN(dec) || dec < 0 || dec > 18) {
+                result = { valid: false, error: 'Decimals must be 0–18' };
+            }
         }
-        const sup = BigInt(form.supply.replace(/,/g, ''));
-        if (sup <= 0n) {
-            setValidationError('Supply must be greater than 0.');
-            return false;
+        if (name === 'supply') {
+            const raw = value.replace(/,/g, '');
+            if (!raw) result = { valid: false, error: 'Supply is required' };
+            else if (BigInt(raw) <= 0n) result = { valid: false, error: 'Supply must be greater than 0' };
         }
-        return true;
+
+        setErrors(prev => ({ ...prev, [name]: result.error }));
+        return result.valid;
+    }
+
+    function validateAll(): boolean {
+        // trigger validation for all fields
+        const validName = validateField('name', form.name);
+        const validSymbol = validateField('symbol', form.symbol);
+        const validDecimals = validateField('decimals', form.decimals);
+        const validSupply = validateField('supply', form.supply);
+
+        setTouched({ name: true, symbol: true, decimals: true, supply: true });
+
+        return validName && validSymbol && validDecimals && validSupply;
     }
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        if (!validate()) return;
+        if (!validateAll()) return;
 
         info('Broadcasting transaction…', 'Please confirm in your Stacks wallet.');
 
@@ -102,7 +151,7 @@ export function TokenForgeForm() {
     }
 
     return (
-        <form className="forge-card" onSubmit={handleSubmit}>
+        <form className="forge-card" onSubmit={handleSubmit} noValidate>
             <div className="form-header">
                 <Flame size={32} className="flame-icon" />
                 <h2>Create Your Token</h2>
@@ -118,12 +167,20 @@ export function TokenForgeForm() {
                     placeholder="e.g. Galaxy Coin"
                     value={form.name}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     maxLength={64}
                     required
-                    className="form-input"
+                    className={`form-input ${errors.name && touched.name ? 'input-error' : ''}`}
                     disabled={loading || !connected}
+                    aria-invalid={!!errors.name}
+                    aria-describedby={errors.name ? "name-error" : undefined}
                 />
                 <span className="char-count">{form.name.length}/64</span>
+                {errors.name && touched.name && (
+                    <span id="name-error" className="error-message">
+                        <AlertTriangle size={12} /> {errors.name}
+                    </span>
+                )}
             </div>
 
             <div className="form-group">
@@ -135,12 +192,20 @@ export function TokenForgeForm() {
                     placeholder="e.g. GLXY"
                     value={form.symbol}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     maxLength={11}
                     required
-                    className="form-input"
+                    className={`form-input ${errors.symbol && touched.symbol ? 'input-error' : ''}`}
                     disabled={loading || !connected}
+                    aria-invalid={!!errors.symbol}
+                    aria-describedby={errors.symbol ? "symbol-error" : undefined}
                 />
                 <span className="char-count">{form.symbol.length}/11</span>
+                {errors.symbol && touched.symbol && (
+                    <span id="symbol-error" className="error-message">
+                        <AlertTriangle size={12} /> {errors.symbol}
+                    </span>
+                )}
             </div>
 
             <div className="form-row">
@@ -151,7 +216,8 @@ export function TokenForgeForm() {
                         name="decimals"
                         value={form.decimals}
                         onChange={handleChange}
-                        className="form-input"
+                        onBlur={handleBlur}
+                        className={`form-input ${errors.decimals && touched.decimals ? 'input-error' : ''}`}
                         disabled={loading || !connected}
                     >
                         <option value="0">0</option>
@@ -159,6 +225,11 @@ export function TokenForgeForm() {
                         <option value="8">8</option>
                         <option value="18">18</option>
                     </select>
+                    {errors.decimals && touched.decimals && (
+                        <span className="error-message">
+                            <AlertTriangle size={12} /> {errors.decimals}
+                        </span>
+                    )}
                 </div>
 
                 <div className="form-group">
@@ -166,22 +237,29 @@ export function TokenForgeForm() {
                     <input
                         id="supply"
                         name="supply"
-                        type="number"
-                        placeholder="1000000"
+                        type="text"
+                        placeholder="1,000,000"
                         value={form.supply}
                         onChange={handleChange}
-                        min="1"
+                        onBlur={handleBlur}
                         required
-                        className="form-input"
+                        className={`form-input ${errors.supply && touched.supply ? 'input-error' : ''}`}
                         disabled={loading || !connected}
+                        aria-invalid={!!errors.supply}
+                        aria-describedby={errors.supply ? "supply-error" : undefined}
                     />
+                    {errors.supply && touched.supply && (
+                        <span id="supply-error" className="error-message">
+                            <AlertTriangle size={12} /> {errors.supply}
+                        </span>
+                    )}
                 </div>
             </div>
 
-            {(validationError || error) && (
+            {error && (
                 <div className="error-alert">
                     <AlertTriangle size={16} />
-                    {validationError || error}
+                    {error}
                 </div>
             )}
 
