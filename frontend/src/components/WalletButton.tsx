@@ -1,7 +1,7 @@
 'use client';
 
 import { useWallet } from '@/contexts/WalletContext';
-import { Wallet, LogOut, Loader2 } from 'lucide-react';
+import { Wallet, LogOut } from 'lucide-react';
 import { useState } from 'react';
 
 export function WalletButton() {
@@ -11,16 +11,19 @@ export function WalletButton() {
     if (connected && address) {
         const short = `${address.slice(0, 6)}…${address.slice(-4)}`;
         return (
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                <span className="address-badge">{short}</span>
+            <div className="wallet-connected" role="status" aria-label="Wallet connected">
+                <span className="address-badge" title={address}>
+                    {short}
+                </span>
                 <button
                     className="btn btn-outline"
                     onClick={disconnect}
                     onMouseEnter={() => setHovering(true)}
                     onMouseLeave={() => setHovering(false)}
+                    aria-label="Disconnect wallet"
                     title="Disconnect wallet"
                 >
-                    <LogOut size={16} />
+                    <LogOut size={16} aria-hidden="true" />
                     {hovering ? 'Disconnect' : 'Connected'}
                 </button>
             </div>
@@ -28,8 +31,12 @@ export function WalletButton() {
     }
 
     return (
-        <button className="btn btn-primary" onClick={connect}>
-            <Wallet size={18} />
+        <button
+            className="btn btn-primary"
+            onClick={connect}
+            aria-label="Connect Stacks Wallet"
+        >
+            <Wallet size={18} aria-hidden="true" />
             Connect Wallet
         </button>
     );
