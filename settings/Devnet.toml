@@ -1,0 +1,14 @@
+[network]
+name = "devnet"
+
+[accounts.deployer]
+mnemonic = "your-mnemonic-here"
+balance = 10000000000
+
+[accounts.wallet_1]
+mnemonic = "sell invite acquire kitten bamboo minor property illicit chief smoker beat buddy either axis"
+balance = 1000000000
+
+[accounts.wallet_2]
+mnemonic = "fetch outside black test wash arm above devote skate protect away pull"
+balance = 1000000000
