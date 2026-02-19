@@ -21,7 +21,11 @@ cd frontend && npm install && npm run dev
 ## How to Contribute
 
 1. **Fork** the repo
-2. **Create** a feature branch: `git checkout -b feature/my-feature`
+3. **Create** a feature branch:
+   - `feat/feature-name` for new features
+   - `fix/bug-fix` for bug fixes
+   - `docs/documentation` for documentation changes
+   - `chore/maintenance` for maintenance tasks
 3. **Write tests** for any new Clarity code
 4. **Run** `clarinet test` to ensure all tests pass
 5. **Submit** a pull request
