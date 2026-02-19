@@ -271,9 +271,27 @@ See [SECURITY.md](./SECURITY.md) for responsible disclosure policy.
 
 Contributions are welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
+
+---
+
+## 🛠️ Development Workflow
+
+1.  **Branching**: Use `feat/` for new features and `fix/` for bug fixes.
+2.  **Commits**: Follow conventional commits (e.g., `feat: add new token type`).
+3.  **PRs**: Open a Pull Request for review before merging to `main`.
+
+---
+
+## 🙏 Acknowledgements
+
+- [Stacks Foundation](https://stacks.org) for the ecosystem support.
+- [Hiro Systems](https://www.hiro.so) for the developer tools.
+- [Next.js](https://nextjs.org) for the framework.
+
 ---
 
 ## 📄 License
+
 
 MIT License — see [LICENSE](./LICENSE).
 
