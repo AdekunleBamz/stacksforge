@@ -1,0 +1,1 @@
+# Contracts\n\nClarity smart contracts for StacksForge.\n\n## Files\n- `sip-010-trait.clar` — SIP-010 standard trait\n- `forge-token.clar` — SIP-010 token implementation\n- `token-factory.clar` — Registry factory\n\n## Testing\n```bash\nclarinet test\n```\n
