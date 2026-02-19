@@ -1,18 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useWallet } from '@/contexts/WalletContext';
 import { useTokenFactory } from '@/hooks/useTokenFactory';
+import { trackEvent } from '@/lib/analytics';
+import { FormInput } from './FormInput';
+import { Button } from './Button'; // Assuming we extracted Button or use standard button
 import { Flame, Loader2, CheckCircle2, ExternalLink, AlertTriangle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { validateTokenForm, formatSupply, type TokenFormState } from '@/lib/validation';
 
-interface FormState {
-    name: string;
-    symbol: string;
-    decimals: string;
-    supply: string;
-}
-
-const INITIAL_FORM: FormState = {
+const INITIAL_FORM: TokenFormState = {
     name: '',
     symbol: '',
     decimals: '6',
@@ -21,40 +19,63 @@ const INITIAL_FORM: FormState = {
 
 export function TokenForgeForm() {
     const { connected } = useWallet();
-    const { createToken, loading, txid, error } = useTokenFactory();
-    const [form, setForm] = useState<FormState>(INITIAL_FORM);
-    const [validationError, setValidationError] = useState<string | null>(null);
+    const { createToken, loading, txid, error: factoryError } = useTokenFactory();
+    const [form, setForm] = useState<TokenFormState>(INITIAL_FORM);
+    const [touched, setTouched] = useState<Record<string, boolean>>({});
+    const [errors, setErrors] = useState<Record<string, string>>({});
+
+    // Watch for success
+    useEffect(() => {
+        if (txid) {
+            trackEvent('forge_token_success', { txid, name: form.name, symbol: form.symbol });
+        }
+    }, [txid, form.name, form.symbol]);
+
+    // Watch for errors
+    useEffect(() => {
+        if (factoryError) {
+            trackEvent('forge_token_error', { error: factoryError });
+        }
+    }, [factoryError]);
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
-        setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
-        setValidationError(null);
+        const { name, value } = e.target;
+        let newValue = value;
+
+        // Input masking for supply
+        if (name === 'supply') {
+            newValue = formatSupply(value);
+        }
+
+        setForm(prev => {
+            const up = { ...prev, [name]: newValue };
+            // Real-time validation if touched
+            if (touched[name]) {
+                const { errors: newErrors } = validateTokenForm(up);
+                setErrors(prevErr => ({ ...prevErr, [name]: newErrors[name as keyof TokenFormState] || '' }));
+            }
+            return up;
+        });
     }
 
-    function validate(): boolean {
-        if (!form.name.trim() || form.name.length > 64) {
-            setValidationError('Token name must be 1–64 characters.');
-            return false;
-        }
-        if (!form.symbol.trim() || form.symbol.length > 11) {
-            setValidationError('Symbol must be 1–11 characters.');
-            return false;
-        }
-        const dec = parseInt(form.decimals, 10);
-        if (isNaN(dec) || dec < 0 || dec > 18) {
-            setValidationError('Decimals must be 0–18.');
-            return false;
-        }
-        const sup = BigInt(form.supply.replace(/,/g, ''));
-        if (sup <= 0n) {
-            setValidationError('Supply must be greater than 0.');
-            return false;
-        }
-        return true;
+    function handleBlur(e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) {
+        const { name } = e.target;
+        setTouched(prev => ({ ...prev, [name]: true }));
+        const { errors: newErrors } = validateTokenForm(form);
+        setErrors(prev => ({ ...prev, [name]: newErrors[name as keyof TokenFormState] || '' }));
     }
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        if (!validate()) return;
+        setTouched({ name: true, symbol: true, decimals: true, supply: true });
+
+        const { isValid, errors: validationErrors } = validateTokenForm(form);
+        if (!isValid) {
+            setErrors(validationErrors as Record<string, string>);
+            return;
+        }
+
+        trackEvent('forge_token_start', { name: form.name, symbol: form.symbol });
 
         await createToken({
             name: form.name.trim(),
@@ -66,69 +87,81 @@ export function TokenForgeForm() {
 
     if (txid) {
         return (
-            <div className="forge-card success-card">
+            <motion.div
+                className="forge-card success-card"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+            >
                 <CheckCircle2 size={48} className="success-icon" />
                 <h2>Token Created! 🎉</h2>
                 <p className="success-message">
                     Your SIP-010 token <strong>{form.name}</strong> ({form.symbol}) is now live on Stacks mainnet.
                 </p>
-                <a
-                    className="btn btn-primary"
-                    href={`https://explorer.hiro.so/txid/${txid}?chain=mainnet`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <ExternalLink size={16} />
-                    View on Stacks Explorer
-                </a>
-                <button className="btn btn-outline" onClick={() => window.location.reload()}>
-                    Forge Another Token
-                </button>
-            </div>
+                <div className="flex gap-4 mt-6 justify-center">
+                    <a
+                        className="btn btn-primary"
+                        href={`https://explorer.hiro.so/txid/${txid}?chain=mainnet`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => trackEvent('click_explorer', { txid })}
+                    >
+                        <ExternalLink size={16} />
+                        View on Explorer
+                    </a>
+                    <button
+                        className="btn btn-outline"
+                        onClick={() => window.location.reload()}
+                    >
+                        Forge Another
+                    </button>
+                </div>
+            </motion.div>
         );
     }
 
     return (
-        <form className="forge-card" onSubmit={handleSubmit}>
+        <motion.form
+            className="forge-card"
+            onSubmit={handleSubmit}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+        >
             <div className="form-header">
                 <Flame size={32} className="flame-icon" />
                 <h2>Create Your Token</h2>
                 <p>Deploy a SIP-010 fungible token on Stacks mainnet in seconds.</p>
             </div>
 
-            <div className="form-group">
-                <label htmlFor="name">Token Name</label>
-                <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    placeholder="e.g. Galaxy Coin"
-                    value={form.name}
-                    onChange={handleChange}
-                    maxLength={64}
-                    required
-                    className="form-input"
-                    disabled={loading || !connected}
-                />
-                <span className="char-count">{form.name.length}/64</span>
-            </div>
+            <FormInput
+                id="name"
+                name="name"
+                label="Token Name"
+                placeholder="e.g. Galaxy Coin"
+                value={form.name}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={errors.name}
+                maxLength={64}
+                required
+                disabled={loading || !connected}
+                helperText={`${form.name.length}/64`}
+            />
 
-            <div className="form-group">
-                <label htmlFor="symbol">Symbol</label>
-                <input
-                    id="symbol"
-                    name="symbol"
-                    type="text"
-                    placeholder="e.g. GLXY"
-                    value={form.symbol}
-                    onChange={handleChange}
-                    maxLength={11}
-                    required
-                    className="form-input"
-                    disabled={loading || !connected}
-                />
-                <span className="char-count">{form.symbol.length}/11</span>
-            </div>
+            <FormInput
+                id="symbol"
+                name="symbol"
+                label="Symbol"
+                placeholder="e.g. GLXY"
+                value={form.symbol}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={errors.symbol}
+                maxLength={11}
+                required
+                disabled={loading || !connected}
+                helperText={`${form.symbol.length}/11`}
+            />
 
             <div className="form-row">
                 <div className="form-group">
@@ -138,7 +171,8 @@ export function TokenForgeForm() {
                         name="decimals"
                         value={form.decimals}
                         onChange={handleChange}
-                        className="form-input"
+                        onBlur={handleBlur}
+                        className={`form-input ${errors.decimals ? 'input-error' : ''}`}
                         disabled={loading || !connected}
                     >
                         <option value="0">0</option>
@@ -146,31 +180,36 @@ export function TokenForgeForm() {
                         <option value="8">8</option>
                         <option value="18">18</option>
                     </select>
+                    {errors.decimals && <span className="error-msg">{errors.decimals}</span>}
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="supply">Total Supply</label>
-                    <input
-                        id="supply"
-                        name="supply"
-                        type="number"
-                        placeholder="1000000"
-                        value={form.supply}
-                        onChange={handleChange}
-                        min="1"
-                        required
-                        className="form-input"
-                        disabled={loading || !connected}
-                    />
-                </div>
+                <FormInput
+                    id="supply"
+                    name="supply"
+                    label="Total Supply"
+                    placeholder="1,000,000"
+                    value={form.supply}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={errors.supply}
+                    required
+                    disabled={loading || !connected}
+                />
             </div>
 
-            {(validationError || error) && (
-                <div className="error-alert">
-                    <AlertTriangle size={16} />
-                    {validationError || error}
-                </div>
-            )}
+            <AnimatePresence>
+                {(factoryError) && (
+                    <motion.div
+                        className="error-alert"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                    >
+                        <AlertTriangle size={16} />
+                        {factoryError}
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <div className="fee-info">
                 <span>Creation fee:</span>
@@ -193,6 +232,6 @@ export function TokenForgeForm() {
                     )}
                 </button>
             )}
-        </form>
+        </motion.form>
     );
 }
