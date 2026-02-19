@@ -92,7 +92,7 @@
 ;; Admin / Minting Functions
 ;; ============================================================
 
-;; Initialise token metadata — called once by the factory
+;; Initialise token metadata - called once by the factory
 (define-public (initialize
     (name     (string-ascii 32))
     (symbol   (string-ascii 32))
@@ -134,7 +134,7 @@
   )
 )
 
-;; Mint additional tokens — only owner
+;; Mint additional tokens - only owner
 (define-public (mint (amount uint) (recipient principal))
   (begin
     (asserts! (is-eq tx-sender (var-get contract-owner)) ERR-NOT-OWNER)

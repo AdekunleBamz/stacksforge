@@ -209,7 +209,7 @@
 )
 
 ;; ============================================================
-;; Admin Functions — only contract-owner
+;; Admin Functions - only contract-owner
 ;; ============================================================
 
 ;; Update creation fee
