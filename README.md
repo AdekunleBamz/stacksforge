@@ -14,8 +14,9 @@
 
 - ⚡ **Instant Deployment** — Create a SIP-010 token in seconds
 - 💰 **Low Cost** — Only 1 STX creation fee
-- 🎨 **Beautiful UI** — Dark, forge-themed interface with glassmorphism
-- 🔗 **100% On-chain** — All token data stored in Clarity contracts
+- 🎨 **Beautiful UI** — Dark, forge-themed glassmorphism design
+- 🔍 **SEO Optimized** — Metatags, sitemap, and OpenGraph support
+- ♿ **Accessible** — WCAG compliant with high contrast & screen reader support
 - 🔒 **Non-custodial** — Your wallet, your keys, your tokens
 - 🌐 **Stacks Native** — Uses `@stacks/connect` and `@stacks/transactions`
 
