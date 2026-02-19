@@ -156,6 +156,7 @@ export function useTokenFactory() {
                     setLoading(false);
                 },
                 onCancel: () => {
+                    setError('Transaction cancelled');
                     setLoading(false);
                 },
             };
