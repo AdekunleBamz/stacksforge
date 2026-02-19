@@ -47,7 +47,7 @@
     (asserts! (is-eq tx-sender sender)        ERR-UNAUTHORIZED)
     (asserts! (not (is-eq sender recipient))  ERR-INVALID-RECIPIENT)
     (try! (ft-transfer? forge-token amount sender recipient))
-    (match memo m (print m) true)
+    (match memo m (begin (print m) true) true)
     (print {
       event:     "token-transfer",
       sender:    sender,
