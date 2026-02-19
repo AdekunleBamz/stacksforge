@@ -6,6 +6,7 @@ import { useToast } from '@/contexts/ToastContext';
 import { useTokenFactory } from '@/hooks/useTokenFactory';
 import { Flame, Loader2, CheckCircle2, ExternalLink, AlertTriangle } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { FormInput } from './FormInput';
 
 interface FormState {
     name: string;
@@ -171,55 +172,35 @@ export function TokenForgeForm() {
                 <p>Deploy a SIP-010 fungible token on Stacks mainnet in seconds.</p>
             </div>
 
-            <div className="form-group">
-                <label htmlFor="name">Token Name</label>
-                <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    placeholder="e.g. Galaxy Coin"
-                    value={form.name}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    maxLength={64}
-                    required
-                    className={`form-input ${errors.name && touched.name ? 'input-error' : ''}`}
-                    disabled={loading || !connected}
-                    aria-invalid={!!errors.name}
-                    aria-describedby={errors.name ? "name-error" : undefined}
-                />
-                <span className="char-count">{form.name.length}/64</span>
-                {errors.name && touched.name && (
-                    <span id="name-error" className="error-message">
-                        <AlertTriangle size={12} /> {errors.name}
-                    </span>
-                )}
-            </div>
+            <FormInput
+                id="name"
+                name="name"
+                label="Token Name"
+                placeholder="e.g. Galaxy Coin"
+                value={form.name}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                maxLength={64}
+                required
+                disabled={loading || !connected}
+                charCount={{ current: form.name.length, max: 64 }}
+                error={touched.name && errors.name ? errors.name : undefined}
+            />
 
-            <div className="form-group">
-                <label htmlFor="symbol">Symbol</label>
-                <input
-                    id="symbol"
-                    name="symbol"
-                    type="text"
-                    placeholder="e.g. GLXY"
-                    value={form.symbol}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    maxLength={11}
-                    required
-                    className={`form-input ${errors.symbol && touched.symbol ? 'input-error' : ''}`}
-                    disabled={loading || !connected}
-                    aria-invalid={!!errors.symbol}
-                    aria-describedby={errors.symbol ? "symbol-error" : undefined}
-                />
-                <span className="char-count">{form.symbol.length}/11</span>
-                {errors.symbol && touched.symbol && (
-                    <span id="symbol-error" className="error-message">
-                        <AlertTriangle size={12} /> {errors.symbol}
-                    </span>
-                )}
-            </div>
+            <FormInput
+                id="symbol"
+                name="symbol"
+                label="Symbol"
+                placeholder="e.g. GLXY"
+                value={form.symbol}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                maxLength={11}
+                required
+                disabled={loading || !connected}
+                charCount={{ current: form.symbol.length, max: 11 }}
+                error={touched.symbol && errors.symbol ? errors.symbol : undefined}
+            />
 
             <div className="form-row">
                 <div className="form-group">
@@ -245,76 +226,55 @@ export function TokenForgeForm() {
                     )}
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="supply">Total Supply</label>
-                    <input
-                        id="supply"
-                        name="supply"
-                        type="text"
-                        placeholder="1,000,000"
-                        value={form.supply}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        required
-                        className={`form-input ${errors.supply && touched.supply ? 'input-error' : ''}`}
-                        disabled={loading || !connected}
-                        aria-invalid={!!errors.supply}
-                        aria-describedby={errors.supply ? "supply-error" : undefined}
-                    />
-                    {errors.supply && touched.supply && (
-                        <span id="supply-error" className="error-message">
-                            <AlertTriangle size={12} /> {errors.supply}
-                        </span>
-                    )}
-                </div>
+                <FormInput
+                    id="supply"
+                    name="supply"
+                    label="Total Supply"
+                    type="text"
+                    placeholder="1,000,000"
+                    value={form.supply}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    required
+                    disabled={loading || !connected}
+                    error={touched.supply && errors.supply ? errors.supply : undefined}
+                />
             </div>
 
-<<<<<<< HEAD
-    {
-        error && (
-            <div className="error-alert">
-                <AlertTriangle size={16} />
-                {error}
-            </div>
-=======
-            {(validationError || error) && (
+            {error && (
                 <motion.div
                     className="error-alert"
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                 >
                     <AlertTriangle size={16} />
-                    {validationError || error}
+                    {error}
                 </motion.div>
->>>>>>> origin/feat/animations
-        )
-    }
-
-    <div className="fee-info">
-        <span>Creation fee:</span>
-        <strong>0.002 STX</strong>
-    </div>
-
-    {
-        !connected ? (
-            <p className="connect-hint">Connect your Stacks wallet (Leather / Xverse) to forge a token.</p>
-        ) : (
-        <motion.button
-            type="submit"
-            className="btn btn-primary btn-large"
-            disabled={loading}
-            id="forge-btn"
-            whileTap={{ scale: 0.98 }}
-            whileHover={{ scale: 1.02 }}
-        >
-            {loading ? (
-                <><Loader2 size={20} className="spin" /> Confirm in wallet…</>
-            ) : (
-                <><Flame size={20} /> Forge Token</>
             )}
-        </motion.button>
-    )
-    }
-        </motion.form >
+
+            <div className="fee-info">
+                <span>Creation fee:</span>
+                <strong>0.002 STX</strong>
+            </div>
+
+            {!connected ? (
+                <p className="connect-hint">Connect your Stacks wallet (Leather / Xverse) to forge a token.</p>
+            ) : (
+                <motion.button
+                    type="submit"
+                    className="btn btn-primary btn-large"
+                    disabled={loading}
+                    id="forge-btn"
+                    whileTap={{ scale: 0.98 }}
+                    whileHover={{ scale: 1.02 }}
+                >
+                    {loading ? (
+                        <><Loader2 size={20} className="spin" /> Confirm in wallet…</>
+                    ) : (
+                        <><Flame size={20} /> Forge Token</>
+                    )}
+                </motion.button>
+            )}
+        </motion.form>
     );
 }

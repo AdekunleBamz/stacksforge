@@ -1,9 +1,16 @@
 // Replace Loader2 with Skeleton import
 import { useEffect, useState } from 'react';
 import { useTokenFactory, TokenInfo } from '@/hooks/useTokenFactory';
+<<<<<<< HEAD
 import { ExternalLink, Coins } from 'lucide-react';
 import { Skeleton } from '@/components/Skeleton';
 import { motion } from 'framer-motion';
+=======
+import { Loader2, Coins } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { TokenCard } from './TokenCard';
+import { Skeleton } from './Skeleton';
+>>>>>>> origin/refactor/components
 
 export function TokenList() {
     const { getTokenCount, getTokenById } = useTokenFactory();
@@ -101,6 +108,7 @@ export function TokenList() {
                 animate="show"
             >
                 {tokens.map(t => (
+<<<<<<< HEAD
                     <motion.div
                         key={t.tokenId}
                         className="token-card"
@@ -129,6 +137,9 @@ export function TokenList() {
                             <ExternalLink size={14} /> Explorer
                         </a>
                     </motion.div>
+=======
+                    <TokenCard key={t.tokenId} token={t} variants={item} />
+>>>>>>> origin/refactor/components
                 ))}
             </motion.div>
         </div>

@@ -1,11 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Flame, Menu, X, Github, BookOpen } from 'lucide-react';
+import { Flame, Menu, X } from 'lucide-react';
 import { WalletButton } from './WalletButton';
-<<<<<<< HEAD
-=======
 import { ThemeToggle } from './ThemeToggle';
+import { NavLinks } from './NavLinks';
 import Link from 'next/link';
 
 export function Navbar() {
@@ -22,16 +21,14 @@ export function Navbar() {
 
                 {/* Desktop Links */}
                 <div className="nav-links desktop-only">
-                    <a href="#forge" className="nav-link">Forge</a>
-                    <a href="#tokens" className="nav-link">Tokens</a>
-                    <a href="https://docs.stacks.co" target="_blank" rel="noopener noreferrer" className="nav-link">Docs</a>
+                    <NavLinks />
                 </div>
 
                 {/* Mobile Actions */}
                 <div className="mobile-actions" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                     <div className="mobile-toggle-theme" style={{ display: 'flex' }}>
-                         <ThemeToggle />
-                     </div>
+                    <div className="mobile-theme-toggle" style={{ display: 'flex' }}>
+                        <ThemeToggle />
+                    </div>
                     <button
                         className="mobile-toggle"
                         onClick={() => setIsOpen(!isOpen)}
@@ -51,18 +48,7 @@ export function Navbar() {
                 {/* Mobile Menu Overlay */}
                 <div className={`mobile-menu ${isOpen ? 'open' : ''}`}>
                     <div className="mobile-menu-inner">
-                        <a href="#forge" className="mobile-link" onClick={() => setIsOpen(false)}>
-                            Forge Token
-                        </a>
-                        <a href="#tokens" className="mobile-link" onClick={() => setIsOpen(false)}>
-                            View Tokens
-                        </a>
-                        <a href="https://docs.stacks.co" target="_blank" rel="noopener noreferrer" className="mobile-link" onClick={() => setIsOpen(false)}>
-                            <BookOpen size={16} /> Documentation
-                        </a>
-                        <a href="https://github.com/AdekunleBamz/stacksforge" target="_blank" rel="noopener noreferrer" className="mobile-link" onClick={() => setIsOpen(false)}>
-                            <Github size={16} /> GitHub
-                        </a>
+                        <NavLinks mobile onLinkClick={() => setIsOpen(false)} />
 
                         <div className="mobile-wallet">
                             <WalletButton />
