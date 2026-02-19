@@ -95,12 +95,12 @@ body {
 }
 
 .nav-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 16px 24px;
   display: flex;
   align-items: center;
   gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 24px;
 }
 
 .nav-brand {
