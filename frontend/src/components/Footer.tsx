@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Flame, Github, Twitter, Heart } from 'lucide-react';
+import { Flame, Github, Twitter, Heart, ArrowUp } from 'lucide-react';
 
 export function Footer() {
     const currentYear = new Date().getFullYear();
@@ -77,6 +77,13 @@ export function Footer() {
                     <a href="https://github.com/AdekunleBamz/stacksforge" aria-label="GitHub"><Github size={20} /></a>
                     <a href="https://twitter.com/Stacks" aria-label="Twitter"><Twitter size={20} /></a>
                 </div>
+                <button
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                    className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors"
+                    aria-label="Back to top"
+                >
+                    <ArrowUp size={20} />
+                </button>
             </div>
         </footer>
     );
