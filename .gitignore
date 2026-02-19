@@ -27,3 +27,15 @@ package-lock.json
 
 # Test wallets and interaction results (contain private keys + real STX)
 internal/
+
+# Cleanup & Security
+scripts/
+contracts/README.md
+deployments/README.md
+**/*.pem
+**/*.key
+**/*.keystore
+
+# Settings (exclude all tomls in settings/ to be safe, except examples)
+settings/*.toml
+!settings/*.toml.example
