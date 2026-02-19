@@ -1,0 +1,15 @@
+{
+    "name": "stacksforge",
+    "version": "1.0.0",
+    "description": "Deploy SIP-010 tokens on Stacks mainnet in seconds",
+    "type": "module",
+    "scripts": {
+        "deploy": "node deploy-mainnet.mjs",
+        "verify": "node scripts/verify-deployment.mjs"
+    },
+    "dependencies": {
+        "@stacks/transactions": "^6.11.2",
+        "@stacks/network": "^6.11.2",
+        "@stacks/wallet-sdk": "^6.11.0"
+    }
+}
