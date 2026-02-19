@@ -127,6 +127,8 @@ export function useTokenFactory() {
 
     const createToken = useCallback(async (params: CreateTokenParams): Promise<void> => {
         if (!address) throw new Error('Wallet not connected');
+        if (!params.name || !params.symbol) throw new Error('Invalid token details');
+        if (params.supply <= 0n) throw new Error('Supply must be positive');
 
         setLoading(true);
         setError(null);
