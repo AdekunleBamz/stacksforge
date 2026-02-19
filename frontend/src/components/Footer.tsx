@@ -44,6 +44,12 @@ export function Footer() {
                             <span className="text-xs">👾</span> Discord
                         </a>
                     </div>
+                    <div className="link-column">
+                        <h4>Legal</h4>
+                        <Link href="/privacy">Privacy Policy</Link>
+                        <Link href="/terms">Terms of Service</Link>
+                        <Link href="/disclaimer">Disclaimer</Link>
+                    </div>
                 </div>
             </div>
 
