@@ -14,3 +14,13 @@ yarn-error.log*
 coverage/
 .nyc_output/
 deployments/default/
+
+# Deployer wallet — NEVER commit the real file, only the .example template
+settings/Mainnet.toml
+!settings/Mainnet.toml.example
+
+# Deployment records contain sensitive txids — track manually
+deployments/mainnet.json
+
+# Lock files
+package-lock.json
