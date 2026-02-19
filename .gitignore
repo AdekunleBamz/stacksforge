@@ -24,3 +24,6 @@ deployments/mainnet.json
 
 # Lock files
 package-lock.json
+
+# Test wallets and interaction results (contain private keys + real STX)
+internal/
