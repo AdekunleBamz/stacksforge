@@ -1,26 +1,11 @@
-import { WalletButton } from '@/components/WalletButton';
+import { Navbar } from '@/components/Navbar';
 import { TokenForgeForm } from '@/components/TokenForgeForm';
 import { TokenList } from '@/components/TokenList';
-import { Flame, Github, Twitter } from 'lucide-react';
 
 export default function HomePage() {
     return (
         <div className="app">
-            {/* Navigation */}
-            <nav className="navbar">
-                <div className="nav-inner">
-                    <div className="nav-brand">
-                        <Flame size={28} className="brand-flame" />
-                        <span className="brand-name">StacksForge</span>
-                    </div>
-                    <div className="nav-links">
-                        <a href="#forge" className="nav-link">Forge</a>
-                        <a href="#tokens" className="nav-link">Tokens</a>
-                        <a href="https://docs.stacks.co" target="_blank" rel="noopener noreferrer" className="nav-link">Docs</a>
-                    </div>
-                    <WalletButton />
-                </div>
-            </nav>
+            <Navbar />
 
             {/* Hero */}
             <section className="hero">
