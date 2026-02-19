@@ -19,7 +19,7 @@ const { STACKS_MAINNET } = networkPkg;
 
 // ── Config ──────────────────────────────────────────────────────────────────
 const TOML_PATH = "./settings/Mainnet.toml";
-const FEE = 5000;              // 0.005 STX per deployment
+const FEE = 20000;             // 0.02 STX per contract deployment
 const NETWORK = STACKS_MAINNET;
 const EPOCH = ClarityVersion.Clarity2;
 
