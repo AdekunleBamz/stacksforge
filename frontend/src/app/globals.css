@@ -485,3 +485,39 @@ body {
   .hero { padding: 80px 16px 48px; }
   .forge-card { padding: 24px 20px; }
 }
+
+/* ---- Error Pages ---- */
+.error-container, .global-error-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  padding: 2rem;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.error-card, .error-content {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  padding: 2rem;
+  border-radius: 1rem;
+  text-align: center;
+  max-width: 400px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.error-icon-wrapper {
+  color: #ef4444;
+  margin-bottom: 1rem;
+}
+
+.error-details {
+  background: rgba(0,0,0,0.2);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+  font-size: 0.875rem;
+  color: #ef4444;
+  word-break: break-word;
+}
