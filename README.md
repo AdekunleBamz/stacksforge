@@ -216,13 +216,21 @@ console.log(cvToJSON(result).value); // e.g. "42"
 DEPLOYER_PRIVATE_KEY=your_private_key_here
 ```
 
+
 ### Frontend (`frontend/.env.local`)
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `NEXT_PUBLIC_FACTORY_ADDRESS` | The contract address of the deployed Token Factory | `SP2...` |
+| `NEXT_PUBLIC_STACKS_NETWORK` | The network to connect to (mainnet/testnet) | `mainnet` |
+| `NEXT_PUBLIC_APP_URL` | The canonical URL of your application | `https://stacksforge.xyz` |
 
 ```env
 NEXT_PUBLIC_FACTORY_ADDRESS=SP2xxx.token-factory
 NEXT_PUBLIC_STACKS_NETWORK=mainnet
 NEXT_PUBLIC_APP_URL=https://stacksforge.xyz
 ```
+
 
 ---
 
