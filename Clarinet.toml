@@ -4,7 +4,7 @@ description = 'Create and deploy SIP-010 fungible tokens on Stacks in seconds'
 authors = ['AdekunleBamz']
 telemetry = false
 
-[contracts.sip-010-trait]
+[contracts.sip-010-trait-ft-standard]
 path = 'contracts/traits/sip-010-trait.clar'
 clarity_version = 2
 epoch = "2.4"

@@ -2,7 +2,7 @@
 ;; SIP-010 Fungible Token implementation for tokens created via StacksForge
 ;; Uses @stacks/connect and @stacks/transactions on the frontend
 
-(impl-trait .sip-010-trait.sip-010-trait)
+(impl-trait .sip-010-trait-ft-standard.sip-010-trait)
 
 ;; ============================================================
 ;; Error constants
