@@ -1,0 +1,75 @@
+.skeleton {
+    display: block;
+    background-color: rgba(255, 255, 255, 0.08);
+    /* Dark mode base */
+    border-radius: 4px;
+    /* Default radius */
+    width: 100%;
+    /* Default width */
+}
+
+/* Variants */
+.text {
+    height: 1em;
+    margin-bottom: 0.5em;
+    /* Spacing for multiline text */
+    border-radius: 4px;
+}
+
+.circular {
+    border-radius: 50%;
+}
+
+.rectangular {
+    border-radius: 8px;
+    /* Slightly rounded rects */
+}
+
+/* Animations */
+.pulse {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.wave {
+    position: relative;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.wave::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.08),
+            transparent);
+    transform: translateX(-100%);
+    animation: wave 1.6s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes wave {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* Dark/Light Context Logic (future-proofing) */
+/* Assuming globals.css uses CSS vars, we can adapt here later if needed */
