@@ -34,9 +34,15 @@ export function Footer() {
                     </div>
                     <div className="link-column">
                         <h4>Community</h4>
-                        <a href="https://github.com/AdekunleBamz/stacksforge" target="_blank" rel="noopener noreferrer">GitHub</a>
-                        <a href="https://twitter.com/Stacks" target="_blank" rel="noopener noreferrer">Twitter</a>
-                        <a href="https://discord.gg/stacks" target="_blank" rel="noopener noreferrer">Discord</a>
+                        <a href="https://github.com/AdekunleBamz/stacksforge" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                            <Github size={14} /> GitHub
+                        </a>
+                        <a href="https://twitter.com/Stacks" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                            <Twitter size={14} /> Twitter
+                        </a>
+                        <a href="https://discord.gg/stacks" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                            <span className="text-xs">👾</span> Discord
+                        </a>
                     </div>
                 </div>
             </div>
