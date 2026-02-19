@@ -2,25 +2,20 @@
 
 ## Supported Versions
 
-| Version | Supported |
-|---------|-----------|
-| 1.x     | ✅        |
+We support the latest version of the StacksForge contracts and frontend.
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in StacksForge, please **do not** open a public issue.
+If you discover a security vulnerability within this project, please send an e-mail to security@stacksforge.xyz. All security vulnerability reports will be promptly addressed.
 
-Instead, email: **security@stacksforge.xyz**
+Please do not report security vulnerabilities through public GitHub issues.
 
-Include:
-- A description of the vulnerability
-- Steps to reproduce
-- Impact assessment
+## Responsible Disclosure
 
-We will respond within 48 hours and work with you on a responsible disclosure timeline.
+We ask that you:
 
-## Security Notes
+- Give us reasonable time to investigate and mitigate an issue before making it public.
+- Do not exploit the vulnerability for malicious purposes.
+- Provide sufficient information to reproduce the problem.
 
-- Clarity contracts are fully open source and auditable
-- No private keys are ever stored or transmitted by the frontend (`@stacks/connect` handles all signing in the user's wallet extension)
-- The creation fee is enforced on-chain and cannot be bypassed
+We will acknowledge your report within 48 hours.
