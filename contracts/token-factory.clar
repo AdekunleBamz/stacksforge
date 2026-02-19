@@ -38,8 +38,8 @@
 (define-data-var fee-recipient      principal tx-sender)
 
 ;; Fee to create a token (in microSTX, 1 STX = 1,000,000 uSTX)
-;; Default: 1 STX
-(define-data-var creation-fee       uint      u1000000)
+;; Default: 0.002 STX
+(define-data-var creation-fee       uint      u2000)
 
 ;; Total number of tokens registered
 (define-data-var token-count        uint      u0)
