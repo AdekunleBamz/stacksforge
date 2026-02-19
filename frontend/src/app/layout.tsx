@@ -46,6 +46,7 @@ export const metadata: Metadata = {
         title: 'StacksForge',
         description: 'Deploy SIP-010 tokens on Stacks mainnet in seconds.',
         creator: '@StacksForge',
+        images: ['/og-image.png'],
     },
     viewport: {
         width: 'device-width',
