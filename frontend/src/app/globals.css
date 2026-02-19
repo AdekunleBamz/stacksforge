@@ -485,3 +485,29 @@ body {
   .hero { padding: 80px 16px 48px; }
   .forge-card { padding: 24px 20px; }
 }
+
+/* ---- Form Validation ---- */
+.input-error {
+  border-color: var(--error) !important;
+  box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.2) !important;
+  background: rgba(239, 68, 68, 0.05) !important;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #fca5a5;
+  font-size: 12px;
+  margin-top: 6px;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.input-success {
+  border-color: var(--success) !important;
+}
