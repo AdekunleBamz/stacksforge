@@ -1,14 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Flame, Loader2, CheckCircle2, ExternalLink, AlertTriangle } from 'lucide-react';
+
 import { useWallet } from '@/contexts/WalletContext';
 import { useToast } from '@/contexts/ToastContext';
 import { useTokenFactory } from '@/hooks/useTokenFactory';
+
 import { trackEvent } from '@/lib/analytics';
-import { FormInput } from './FormInput';
-import { Flame, Loader2, CheckCircle2, ExternalLink, AlertTriangle } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { validateTokenForm, formatSupply, type TokenFormState } from '@/lib/validation';
+import { FormInput } from './FormInput';
 
 const INITIAL_FORM: TokenFormState = {
     name: '',
