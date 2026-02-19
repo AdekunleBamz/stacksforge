@@ -17,6 +17,19 @@ export function Footer() {
                     <p className="footer-desc">
                         The easiest way to forge SIP-010 fungible tokens on the Stacks blockchain. No code required.
                     </p>
+                    <div className="mt-4">
+                        <h4 className="text-sm font-semibold mb-2">Stay Updated</h4>
+                        <div className="flex gap-2">
+                            <input
+                                type="email"
+                                placeholder="Enter your email"
+                                className="px-3 py-1.5 rounded bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-primary"
+                            />
+                            <button className="px-3 py-1.5 rounded bg-primary text-white text-sm hover:bg-primary-dark transition-colors">
+                                Subscribe
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="footer-links">
