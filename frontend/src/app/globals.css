@@ -7,14 +7,13 @@
 
 /* ---- Variables ---- */
 :root {
-  <<<<<<< HEAD=======
   /* Default variables/tokens */
   --radius: 16px;
   --radius-sm: 10px;
 }
 
 [data-theme="dark"] {
-  >>>>>>>origin/feat/theme-switcher --bg: #0a0a0f;
+  --bg: #0a0a0f;
   --bg-card: rgba(255, 255, 255, 0.04);
   --bg-input: rgba(255, 255, 255, 0.06);
   --border: rgba(255, 255, 255, 0.08);
@@ -26,9 +25,6 @@
   --text-muted: #8888aa;
   --success: #22c55e;
   --error: #ef4444;
-  <<<<<<< HEAD --radius: 16px;
-  --radius-sm: 10px;
-  =======
 }
 
 [data-theme="light"] {
@@ -63,7 +59,6 @@
 .theme-toggle:hover {
   background: var(--bg-card);
   color: var(--primary);
-  >>>>>>>origin/feat/theme-switcher
 }
 
 /* ---- Reset ---- */
@@ -137,6 +132,12 @@ body {
 
 .nav-link:hover {
   color: var(--text);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 /* ---- Buttons ---- */
@@ -716,55 +717,6 @@ body {
   }
 }
 
-/* ---- Responsive ---- */
-@media (max-width: 640px) {
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-
-  .nav-links {
-    display: none;
-  }
-
-  .hero {
-    padding: 80px 16px 48px;
-  }
-
-  .forge-card {
-    padding: 24px 20px;
-  }
-
-  <<<<<<< HEAD=======
-}
-
-/* Theme Toggle & Responsive Actions */
-.mobile-actions {
-  display: none;
-  align-items: center;
-  gap: 16px;
-}
-
-.mobile-theme-toggle {
-  display: flex;
-}
-
-.nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-@media (max-width: 768px) {
-  .mobile-actions {
-    display: flex;
-    margin-left: auto;
-  }
-
-  >>>>>>>origin/feat/theme-switcher
-}
-
-<<<<<<< HEAD
-
 /* ---- Toast Notification System ---- */
 .toast-container {
   position: fixed;
@@ -970,6 +922,17 @@ body {
   margin-top: 24px;
 }
 
+/* Theme Toggle & Responsive Actions */
+.mobile-actions {
+  display: none;
+  align-items: center;
+  gap: 16px;
+}
+
+.mobile-theme-toggle {
+  display: flex;
+}
+
 @media (max-width: 768px) {
 
   .nav-links.desktop-only,
@@ -979,6 +942,11 @@ body {
 
   .mobile-toggle {
     display: block;
+    margin-left: auto;
+  }
+
+  .mobile-actions {
+    display: flex;
     margin-left: auto;
   }
 }
@@ -1018,4 +986,30 @@ body {
     font-size: 16px;
     padding: 12px;
   }
+}
+
+/* ---- Accessibility ---- */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
