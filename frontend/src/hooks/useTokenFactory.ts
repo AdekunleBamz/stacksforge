@@ -25,6 +25,14 @@ import { useWallet } from '@/contexts/WalletContext';
 const FACTORY_ADDRESS = process.env.NEXT_PUBLIC_FACTORY_ADDRESS ?? '';
 const [CONTRACT_ADDRESS, CONTRACT_NAME] = FACTORY_ADDRESS.split('.');
 
+function mapError(err: any): string {
+    const msg = err?.message || String(err);
+    if (msg.includes('User denied')) return 'Transaction cancelled by user';
+    if (msg.includes('Not enough funds')) return 'Insufficient STX balance';
+    if (msg.includes('404')) return 'Contract not found';
+    return msg;
+}
+
 export interface TokenInfo {
     tokenId: number;
     name: string;
