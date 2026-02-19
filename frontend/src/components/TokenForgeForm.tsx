@@ -216,6 +216,7 @@ export function TokenForgeForm() {
                     required
                     disabled={loading || !connected}
                     error={errors.supply}
+                    autoComplete="off"
                 />
             </div>
 
