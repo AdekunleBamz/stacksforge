@@ -7,7 +7,14 @@
 
 /* ---- Variables ---- */
 :root {
-  --bg: #0a0a0f;
+  <<<<<<< HEAD=======
+  /* Default variables/tokens */
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+[data-theme="dark"] {
+  >>>>>>>origin/feat/theme-switcher --bg: #0a0a0f;
   --bg-card: rgba(255, 255, 255, 0.04);
   --bg-input: rgba(255, 255, 255, 0.06);
   --border: rgba(255, 255, 255, 0.08);
@@ -19,8 +26,44 @@
   --text-muted: #8888aa;
   --success: #22c55e;
   --error: #ef4444;
-  --radius: 16px;
+  <<<<<<< HEAD --radius: 16px;
   --radius-sm: 10px;
+  =======
+}
+
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-input: #f1f5f9;
+  --border: #e2e8f0;
+  --border-glow: rgba(255, 98, 0, 0.5);
+  --primary: #ff6200;
+  --primary-dim: #ea580c;
+  --accent: #f97316;
+  --text: #0f172a;
+  --text-muted: #64748b;
+  --success: #16a34a;
+  --error: #dc2626;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-toggle:hover {
+  background: var(--bg-card);
+  color: var(--primary);
+  >>>>>>>origin/feat/theme-switcher
 }
 
 /* ---- Reset ---- */
@@ -690,9 +733,38 @@ body {
   .forge-card {
     padding: 24px 20px;
   }
+
+  <<<<<<< HEAD=======
+}
+
+/* Theme Toggle & Responsive Actions */
+.mobile-actions {
+  display: none;
+  align-items: center;
+  gap: 16px;
+}
+
+.mobile-theme-toggle {
+  display: flex;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .mobile-actions {
+    display: flex;
+    margin-left: auto;
+  }
+
+  >>>>>>>origin/feat/theme-switcher
 }
 
 <<<<<<< HEAD
+
 /* ---- Toast Notification System ---- */
 .toast-container {
   position: fixed;
@@ -844,7 +916,7 @@ body {
 .input-success {
   border-color: var(--success) !important;
 }
-=======
+
 /* ---- Responsive Navbar ---- */
 .mobile-toggle {
   display: none;
@@ -857,7 +929,8 @@ body {
 
 .mobile-menu {
   position: fixed;
-  top: 73px; /* height of navbar */
+  top: 73px;
+  /* height of navbar */
   left: 0;
   width: 100%;
   height: calc(100vh - 73px);
@@ -898,10 +971,12 @@ body {
 }
 
 @media (max-width: 768px) {
-  .nav-links.desktop-only, 
+
+  .nav-links.desktop-only,
   .desktop-only {
     display: none;
   }
+
   .mobile-toggle {
     display: block;
     margin-left: auto;
@@ -911,27 +986,36 @@ body {
 /* ---- Mobile Refinements ---- */
 @media (max-width: 480px) {
   .hero-title {
-    font-size: 32px; /* Smaller than clamp min if needed */
+    font-size: 32px;
+    /* Smaller than clamp min if needed */
   }
+
   .hero-stats {
     gap: 16px;
   }
+
   .stat-divider {
-    display: none; /* Stack stats vertically or grid */
+    display: none;
+    /* Stack stats vertically or grid */
   }
+
   .stat {
-    width: 45%; /* 2 cols */
+    width: 45%;
+    /* 2 cols */
     margin-bottom: 12px;
   }
+
   .token-grid {
-    grid-template-columns: 1fr; /* Single column on very small screens */
+    grid-template-columns: 1fr;
+    /* Single column on very small screens */
   }
+
   .forge-card {
     padding: 20px 16px;
   }
+
   .btn-large {
     font-size: 16px;
     padding: 12px;
   }
 }
->>>>>>> origin/feat/responsive-layout

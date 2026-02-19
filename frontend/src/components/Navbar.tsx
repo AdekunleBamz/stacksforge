@@ -3,6 +3,9 @@
 import { useState } from 'react';
 import { Flame, Menu, X, Github, BookOpen } from 'lucide-react';
 import { WalletButton } from './WalletButton';
+<<<<<<< HEAD
+=======
+import { ThemeToggle } from './ThemeToggle';
 import Link from 'next/link';
 
 export function Navbar() {
@@ -24,18 +27,24 @@ export function Navbar() {
                     <a href="https://docs.stacks.co" target="_blank" rel="noopener noreferrer" className="nav-link">Docs</a>
                 </div>
 
-                {/* Mobile Toggle */}
-                <button
-                    className="mobile-toggle"
-                    onClick={() => setIsOpen(!isOpen)}
-                    aria-label="Toggle menu"
-                    aria-expanded={isOpen}
-                >
-                    {isOpen ? <X size={24} /> : <Menu size={24} />}
-                </button>
+                {/* Mobile Actions */}
+                <div className="mobile-actions" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                     <div className="mobile-toggle-theme" style={{ display: 'flex' }}>
+                         <ThemeToggle />
+                     </div>
+                    <button
+                        className="mobile-toggle"
+                        onClick={() => setIsOpen(!isOpen)}
+                        aria-label="Toggle menu"
+                        aria-expanded={isOpen}
+                    >
+                        {isOpen ? <X size={24} /> : <Menu size={24} />}
+                    </button>
+                </div>
 
-                {/* Desktop Wallet */}
-                <div className="desktop-only">
+                {/* Desktop Wallet & Theme */}
+                <div className="desktop-only" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <ThemeToggle />
                     <WalletButton />
                 </div>
 

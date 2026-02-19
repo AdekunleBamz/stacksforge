@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import { WalletProvider } from '@/contexts/WalletContext';
 import { ToastProvider } from '@/contexts/ToastContext';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 import { ToastContainer } from '@/components/ToastContainer';
 import './globals.css';
 
@@ -32,19 +33,25 @@ export const metadata: Metadata = {
     },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
     return (
         <html lang="en" className={inter.variable}>
             <head>
                 <link rel="icon" href="/favicon.ico" />
             </head>
             <body>
-                <WalletProvider>
-                    <ToastProvider>
-                        {children}
-                        <ToastContainer />
-                    </ToastProvider>
-                </WalletProvider>
+                <ThemeProvider>
+                    <WalletProvider>
+                        <ToastProvider>
+                            {children}
+                            <ToastContainer />
+                        </ToastProvider>
+                    </WalletProvider>
+                </ThemeProvider>
             </body>
         </html>
     );
