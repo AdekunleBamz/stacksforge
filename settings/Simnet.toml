@@ -1,14 +1,19 @@
 [network]
 name = "simnet"
+deployment_fee_rate = 10
 
 [accounts.deployer]
-mnemonic = "sell invite acquire kitten bamboo minor property illicit chief smoker beat buddy either axis"
-balance = 10000000000
+mnemonic = "zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo wrong"
+balance = 100_000_000_000_000
 
 [accounts.wallet_1]
-mnemonic = "fetch outside black test wash arm above devote skate protect away pull"
-balance = 1000000000
+mnemonic = "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon cactus"
+balance = 100_000_000_000_000
 
 [accounts.wallet_2]
-mnemonic = "phase chicken merit jump just quit suit wrong lobster garlic abandon resource"
-balance = 1000000000
+mnemonic = "legal winner thank year wave sausage worth useful legal winner thank yellow"
+balance = 100_000_000_000_000
+
+[accounts.wallet_3]
+mnemonic = "letter advice cage absurd amount doctor acoustic avoid letter advice cage above"
+balance = 100_000_000_000_000
