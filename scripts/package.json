@@ -1,0 +1,20 @@
+{
+    "name": "stacksforge-scripts",
+    "version": "1.0.0",
+    "description": "StacksForge deployment and interaction scripts",
+    "scripts": {
+        "deploy": "ts-node scripts/deploy.ts",
+        "verify": "ts-node scripts/verify-deployment.ts",
+        "interact": "ts-node scripts/interact.ts"
+    },
+    "dependencies": {
+        "@stacks/transactions": "^6.11.2",
+        "@stacks/network": "^6.11.2",
+        "dotenv": "^16.3.1"
+    },
+    "devDependencies": {
+        "@types/node": "^20.11.0",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.3.3"
+    }
+}
