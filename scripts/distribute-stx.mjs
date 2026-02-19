@@ -20,7 +20,7 @@ const { StacksMainnet } = networkPkg;
 const WALLETS_PATH = "./internal/test-wallets.json";
 const NETWORK = new StacksMainnet();
 const GAS_FEE = 1000;           // 0.001 STX in microSTX
-const AMOUNT_EACH = 1_001_000;      // 1.001 STX in microSTX (covers 1 STX creation fee + 0.001 STX gas)
+const AMOUNT_EACH = 5_000;          // 0.005 STX per wallet (covers 0.002 creation fee + 0.001 gas + buffer)
 const DELAY_MS = 5_000;          // 5 seconds between transactions
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
