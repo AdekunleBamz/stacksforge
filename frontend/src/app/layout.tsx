@@ -1,9 +1,19 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import { WalletProvider } from '@/contexts/WalletContext';
+import { ToastProvider } from '@/contexts/ToastContext';
+import { ThemeProvider } from '@/contexts/ThemeContext';
+import { ToastContainer } from '@/components/ToastContainer';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+
+export const viewport: Viewport = {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+    themeColor: '#0a0a0f',
+};
 
 export const metadata: Metadata = {
     title: 'StacksForge — Forge SIP-010 Tokens on Stacks',
@@ -23,16 +33,22 @@ export const metadata: Metadata = {
     },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
     return (
-        <html lang="en" className={inter.variable}>
-            <head>
-                <link rel="icon" href="/favicon.ico" />
-            </head>
-            <body>
-                <WalletProvider>
-                    {children}
-                </WalletProvider>
+        <html lang="en">
+            <body className={inter.className}>
+                <ThemeProvider>
+                    <WalletProvider>
+                        <ToastProvider>
+                            {children}
+                            <ToastContainer />
+                        </ToastProvider>
+                    </WalletProvider>
+                </ThemeProvider>
             </body>
         </html>
     );
