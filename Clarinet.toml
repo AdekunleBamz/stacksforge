@@ -21,7 +21,7 @@ epoch = "2.4"
 
 [[devnet.accounts]]
 name = "deployer"
-mnemonic = "your-mnemonic-here"
+mnemonic = "sell invite acquire kitten bamboo minor property illicit chief smoker beat buddy either axis"
 balance = 10000000000
 
 [[devnet.accounts]]
