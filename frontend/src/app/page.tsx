@@ -1,26 +1,14 @@
 import { WalletButton } from '@/components/WalletButton';
 import { TokenForgeForm } from '@/components/TokenForgeForm';
 import { TokenList } from '@/components/TokenList';
-import { Flame, Github, Twitter } from 'lucide-react';
+import { Navbar } from '@/components/Navbar';
+import { Footer } from '@/components/Footer';
 
 export default function HomePage() {
     return (
         <div className="app">
             {/* Navigation */}
-            <nav className="navbar">
-                <div className="nav-inner">
-                    <div className="nav-brand">
-                        <Flame size={28} className="brand-flame" />
-                        <span className="brand-name">StacksForge</span>
-                    </div>
-                    <div className="nav-links">
-                        <a href="#forge" className="nav-link">Forge</a>
-                        <a href="#tokens" className="nav-link">Tokens</a>
-                        <a href="https://docs.stacks.co" target="_blank" rel="noopener noreferrer" className="nav-link">Docs</a>
-                    </div>
-                    <WalletButton />
-                </div>
-            </nav>
+            <Navbar />
 
             {/* Hero */}
             <section className="hero">
@@ -97,24 +85,7 @@ export default function HomePage() {
             </section>
 
             {/* Footer */}
-            <footer className="footer">
-                <div className="footer-inner">
-                    <div className="footer-brand">
-                        <Flame size={20} className="brand-flame" />
-                        <span>StacksForge</span>
-                    </div>
-                    <p className="footer-sub">Built on <strong>Stacks</strong> using <code>@stacks/connect</code> &amp; <code>@stacks/transactions</code></p>
-                    <div className="footer-links">
-                        <a href="https://github.com/AdekunleBamz/stacksforge" target="_blank" rel="noopener noreferrer">
-                            <Github size={20} />
-                        </a>
-                        <a href="https://explorer.hiro.so" target="_blank" rel="noopener noreferrer">
-                            🔍 Explorer
-                        </a>
-                    </div>
-                    <p className="footer-copyright">MIT License © 2025 AdekunleBamz</p>
-                </div>
-            </footer>
+            <Footer />
         </div>
     );
 }
