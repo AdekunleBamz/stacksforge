@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { useTokenFactory, TokenInfo } from '@/hooks/useTokenFactory';
-import { ExternalLink, Loader2, Coins } from 'lucide-react';
+import { Loader2, Coins } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { TokenCard } from './TokenCard';
+import { Skeleton } from './Skeleton';
 
 export function TokenList() {
     const { getTokenCount, getTokenById } = useTokenFactory();
@@ -32,6 +35,21 @@ export function TokenList() {
         load();
     }, [getTokenCount, getTokenById]);
 
+    const container = {
+        hidden: { opacity: 0 },
+        show: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1
+            }
+        }
+    };
+
+    const item = {
+        hidden: { opacity: 0, y: 20 },
+        show: { opacity: 1, y: 0 }
+    };
+
     if (loading) {
         return (
             <div className="token-list-loading">
@@ -57,32 +75,16 @@ export function TokenList() {
                 <h2>All Tokens</h2>
                 <span className="badge">{count} total</span>
             </div>
-            <div className="token-grid">
+            <motion.div
+                className="token-grid"
+                variants={container}
+                initial="hidden"
+                animate="show"
+            >
                 {tokens.map(t => (
-                    <div key={t.tokenId} className="token-card">
-                        <div className="token-avatar">{t.symbol.slice(0, 2)}</div>
-                        <div className="token-info">
-                            <h3>{t.name}</h3>
-                            <span className="token-symbol">{t.symbol}</span>
-                        </div>
-                        <div className="token-meta">
-                            <span>Supply: {Number(t.supply).toLocaleString()}</span>
-                            <span>Decimals: {t.decimals}</span>
-                            <span className="creator">
-                                {t.creator.slice(0, 8)}…{t.creator.slice(-4)}
-                            </span>
-                        </div>
-                        <a
-                            href={`https://explorer.hiro.so/address/${t.creator}?chain=mainnet`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="token-explorer-link"
-                        >
-                            <ExternalLink size={14} /> Explorer
-                        </a>
-                    </div>
+                    <TokenCard key={t.tokenId} token={t} variants={item} />
                 ))}
-            </div>
+            </motion.div>
         </div>
     );
 }
