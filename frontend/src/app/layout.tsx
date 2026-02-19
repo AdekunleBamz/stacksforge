@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { WalletProvider } from '@/contexts/WalletContext';
+import { ToastProvider } from '@/contexts/ToastContext';
+import { ToastContainer } from '@/components/ToastContainer';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
@@ -31,7 +33,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </head>
             <body>
                 <WalletProvider>
-                    {children}
+                    <ToastProvider>
+                        {children}
+                        <ToastContainer />
+                    </ToastProvider>
                 </WalletProvider>
             </body>
         </html>
