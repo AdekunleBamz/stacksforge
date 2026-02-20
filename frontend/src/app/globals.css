@@ -679,6 +679,18 @@ body {
   gap: 2rem;
 }
 
+@media (max-width: 768px) {
+  .footer-links {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr !important;
+    gap: 2rem;
+  }
+}
+
 .link-column h4 {
   font-size: 0.9rem;
   font-weight: 600;
