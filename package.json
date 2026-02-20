@@ -1,6 +1,6 @@
 {
     "name": "stacksforge",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Deploy SIP-010 tokens on Stacks mainnet in seconds",
     "type": "module",
     "scripts": {
