@@ -218,6 +218,7 @@ export function TokenForgeForm() {
                     required
                     disabled={loading || !connected}
                     error={errors.supply}
+                    autoComplete="off"
                 />
             </div>
 
@@ -228,6 +229,7 @@ export function TokenForgeForm() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
+                        role="alert"
                     >
                         <AlertTriangle size={16} />
                         {factoryError}

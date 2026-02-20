@@ -55,3 +55,31 @@ export function formatSupply(value: string): string {
     if (!raw) return '';
     return Number(raw).toLocaleString('en-US');
 }
+
+export interface TokenFormState {
+    name: string;
+    symbol: string;
+    decimals: string;
+    supply: string;
+}
+
+export function validateTokenForm(form: TokenFormState) {
+    const errors: Partial<Record<keyof TokenFormState, string>> = {};
+
+    const nameVal = validators.name(form.name);
+    if (!nameVal.valid) errors.name = nameVal.error;
+
+    const symbolVal = validators.symbol(form.symbol);
+    if (!symbolVal.valid) errors.symbol = symbolVal.error;
+
+    const decimalsVal = validators.decimals(form.decimals);
+    if (!decimalsVal.valid) errors.decimals = decimalsVal.error;
+
+    const supplyVal = validators.supply(form.supply);
+    if (!supplyVal.valid) errors.supply = supplyVal.error;
+
+    return {
+        isValid: Object.keys(errors).length === 0,
+        errors
+    };
+}

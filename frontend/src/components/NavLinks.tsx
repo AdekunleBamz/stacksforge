@@ -25,7 +25,7 @@ export function NavLinks({ mobile, onLinkClick }: NavLinksProps) {
                 className={className}
                 onClick={onLinkClick}
             >
-                {mobile && <BookOpen size={16} />} Docs
+                {mobile && <BookOpen size={16} aria-hidden="true" />} Docs
             </a>
             {mobile && (
                 <a
@@ -35,7 +35,7 @@ export function NavLinks({ mobile, onLinkClick }: NavLinksProps) {
                     className={className}
                     onClick={onLinkClick}
                 >
-                    <Github size={16} /> GitHub
+                    <Github size={16} aria-hidden="true" /> GitHub
                 </a>
             )}
         </>

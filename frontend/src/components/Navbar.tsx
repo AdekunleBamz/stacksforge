@@ -15,7 +15,7 @@ export function Navbar() {
             <div className="nav-inner">
                 {/* Brand */}
                 <Link href="/" className="nav-brand" onClick={() => setIsOpen(false)}>
-                    <Flame size={28} className="brand-flame" />
+                    <Flame size={28} className="brand-flame" aria-hidden="true" />
                     <span className="brand-name">StacksForge</span>
                 </Link>
 
