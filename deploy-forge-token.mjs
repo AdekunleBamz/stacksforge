@@ -1,7 +1,7 @@
 /**
  * deploy-forge-token.mjs
- * Deploys ONLY the forge-token contract with a fresh nonce fetched from chain.
- * Run this if forge-token was skipped in the main deploy due to nonce conflict.
+ * Deploys ONLY the forge-token-v-i2 contract with a fresh nonce fetched from chain.
+ * Run this if forge-token-v-i2 was skipped in the main deploy due to nonce conflict.
  */
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import txPkg from "@stacks/transactions";
@@ -41,7 +41,7 @@ async function fetchNonce(address) {
 }
 
 async function main() {
-    console.log("🔥 StacksForge — forge-token retry deploy");
+    console.log("🔥 StacksForge — forge-token-v-i2 retry deploy");
     console.log("══════════════════════════════════════════");
 
     const mnemonic = extractMnemonic(TOML_PATH);
@@ -55,13 +55,13 @@ async function main() {
     // Fetch fresh nonce so there's no conflict
     const nonce = await fetchNonce(senderAddress);
 
-    const codeBody = readFileSync("contracts/forge-token.clar", "utf-8");
+    const codeBody = readFileSync("contracts/forge-token-v-i2.clar", "utf-8");
 
-    console.log(`\n─── Deploying forge-token (nonce: ${nonce}) ───`);
+    console.log(`\n─── Deploying forge-token-v-i2 (nonce: ${nonce}) ───`);
 
     try {
         const tx = await makeContractDeploy({
-            contractName: "forge-token",
+            contractName: "forge-token-v-i2",
             codeBody,
             senderKey: privateKey,
             network: NETWORK,
@@ -83,7 +83,7 @@ async function main() {
         }
 
         const txid = typeof result === "string" ? result : result.txid;
-        const principal = `${senderAddress}.forge-token`;
+        const principal = `${senderAddress}.forge-token-v-i2`;
         console.log(`  🚀 Broadcast OK! txid: ${txid}`);
         console.log(`  📄 Principal:    ${principal}`);
         console.log(`  🔗 https://explorer.hiro.so/txid/${txid}?chain=mainnet`);
@@ -92,13 +92,13 @@ async function main() {
         const recPath = "./deployments/mainnet.json";
         const record = existsSync(recPath) ? JSON.parse(readFileSync(recPath, "utf-8")) : {};
         record.contracts = record.contracts ?? {};
-        record.contracts["forge-token"] = { txid, principal };
+        record.contracts["forge-token-v-i2"] = { txid, principal };
         writeFileSync(recPath, JSON.stringify(record, null, 2));
         console.log(`\n📄 deployments/mainnet.json updated`);
         console.log(`\n🎉 All 3 contracts now deployed!`);
-        console.log(`   forge-token:               ${principal}`);
-        console.log(`   token-factory:             SP5K2RHMSBH4PAP4PGX77MCVNK1ZEED07CWX9TJT.token-factory`);
-        console.log(`   sip-010-trait-ft-standard: SP5K2RHMSBH4PAP4PGX77MCVNK1ZEED07CWX9TJT.sip-010-trait-ft-standard`);
+        console.log(`   forge-token-v-i2:               ${principal}`);
+        console.log(`   token-factory-v-i2:             SP5K2RHMSBH4PAP4PGX77MCVNK1ZEED07CWX9TJT.token-factory-v-i2`);
+        console.log(`   sip-010-trait-ft-standard-v-i2: SP5K2RHMSBH4PAP4PGX77MCVNK1ZEED07CWX9TJT.sip-010-trait-ft-standard-v-i2`);
 
     } catch (err) {
         console.log(`  ❌ Error: ${err.message}`);

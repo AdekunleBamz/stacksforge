@@ -25,7 +25,7 @@
 (define-constant MAX-NAME-LEN   u64)
 (define-constant MAX-SYMBOL-LEN u11)
 (define-constant MAX-DECIMALS   u18)
-(define-constant CONTRACT-VERSION "1.0.0")
+(define-constant CONTRACT-VERSION "v-i2")
 
 ;; ============================================================
 ;; Data Variables

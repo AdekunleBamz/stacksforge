@@ -4,18 +4,18 @@ description = 'Create and deploy SIP-010 fungible tokens on Stacks in seconds'
 authors = ['AdekunleBamz']
 telemetry = false
 
-[contracts.sip-010-trait-ft-standard]
-path = 'contracts/traits/sip-010-trait.clar'
+[contracts.sip-010-trait-ft-standard-v-i2]
+path = 'contracts/traits/sip-010-trait-v-i2.clar'
 clarity_version = 2
 epoch = "2.4"
 
-[contracts.forge-token]
-path = 'contracts/forge-token.clar'
+[contracts.forge-token-v-i2]
+path = 'contracts/forge-token-v-i2.clar'
 clarity_version = 2
 epoch = "2.4"
 
-[contracts.token-factory]
-path = 'contracts/token-factory.clar'
+[contracts.token-factory-v-i2]
+path = 'contracts/token-factory-v-i2.clar'
 clarity_version = 2
 epoch = "2.4"
 

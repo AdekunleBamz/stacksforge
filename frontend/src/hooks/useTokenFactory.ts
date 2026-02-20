@@ -2,7 +2,7 @@
 
 /**
  * useToken hook
- * Calls token-factory contract using @stacks/transactions + @stacks/connect
+ * Calls token-factory-v-i2 contract using @stacks/transactions + @stacks/connect
  */
 
 import { useCallback, useState } from 'react';

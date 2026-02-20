@@ -46,10 +46,10 @@ stacksforge/
 │   ├── traits/
 │   │   └── sip-010-trait.clar      # SIP-010 standard trait
 │   ├── forge-token.clar            # SIP-010 fungible token contract
-│   └── token-factory.clar         # Factory / registry contract
+│   └── token-factory-v-i2.clar         # Factory / registry contract
 ├── tests/
 │   ├── forge-token.test.ts        # Clarinet unit tests
-│   └── token-factory.test.ts
+│   └── token-factory-v-i2.test.ts
 ├── scripts/
 │   ├── deploy.ts                  # Mainnet deployment (@stacks/transactions)
 │   ├── verify-deployment.ts       # On-chain verification
@@ -176,7 +176,7 @@ import { StacksMainnet } from '@stacks/network';
 
 await openContractCall({
   contractAddress: 'SP2...',
-  contractName:    'token-factory',
+  contractName:    'token-factory-v-i2',
   functionName:    'create-token',
   functionArgs: [
     stringAsciiCV('My Token'),
@@ -198,7 +198,7 @@ import { StacksMainnet } from '@stacks/network';
 
 const result = await callReadOnlyFunction({
   contractAddress: 'SP2...',
-  contractName:    'token-factory',
+  contractName:    'token-factory-v-i2',
   functionName:    'get-token-count',
   functionArgs:    [],
   network:         new StacksMainnet(),
@@ -228,7 +228,7 @@ DEPLOYER_PRIVATE_KEY=your_private_key_here
 | `NEXT_PUBLIC_APP_URL` | The canonical URL of your application | `https://stacksforge.xyz` |
 
 ```env
-NEXT_PUBLIC_FACTORY_ADDRESS=SP2xxx.token-factory
+NEXT_PUBLIC_FACTORY_ADDRESS=SP2xxx.token-factory-v-i2
 NEXT_PUBLIC_STACKS_NETWORK=mainnet
 NEXT_PUBLIC_APP_URL=https://stacksforge.xyz
 ```
@@ -238,7 +238,7 @@ NEXT_PUBLIC_APP_URL=https://stacksforge.xyz
 
 ## 🧪 Smart Contracts
 
-### `token-factory.clar`
+### `token-factory-v-i2.clar`
 
 The main registry contract. Call `create-token` to register a new SIP-010 token.
 

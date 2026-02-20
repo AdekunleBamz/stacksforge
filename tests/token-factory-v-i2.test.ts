@@ -2,11 +2,11 @@ import { Clarinet, Tx, Chain, Account, types } from 'https://deno.land/x/clarine
 import { assertEquals } from 'https://deno.land/std@0.170.0/testing/asserts.ts';
 
 // ============================================================
-// StacksForge: token-factory.clar tests
+// StacksForge: token-factory-v-i2.clar tests
 // ============================================================
 
 Clarinet.test({
-    name: "token-factory: create-token registers a token correctly",
+    name: "token-factory-v-i2: create-token registers a token correctly",
     async fn(chain: Chain, accounts: Map<string, Account>) {
         const deployer = accounts.get('deployer')!;
         const wallet1 = accounts.get('wallet_1')!;
@@ -14,7 +14,7 @@ Clarinet.test({
         // wallet1 creates a token, pays 1 STX fee
         const block = chain.mineBlock([
             Tx.contractCall(
-                'token-factory',
+                'token-factory-v-i2',
                 'create-token',
                 [
                     types.ascii("Galaxy Coin"),
@@ -29,36 +29,36 @@ Clarinet.test({
         block.receipts[0].result.expectOk().expectUint(0); // first token id = 0
 
         // Check token count  
-        const count = chain.callReadOnlyFn('token-factory', 'get-token-count', [], deployer.address);
+        const count = chain.callReadOnlyFn('token-factory-v-i2', 'get-token-count', [], deployer.address);
         count.result.expectOk().expectUint(1);
 
         // Fetch token by id
-        const token = chain.callReadOnlyFn('token-factory', 'get-token-by-id', [types.uint(0)], deployer.address);
+        const token = chain.callReadOnlyFn('token-factory-v-i2', 'get-token-by-id', [types.uint(0)], deployer.address);
         const tokenData = token.result.expectOk().expectTuple();
         assertEquals(tokenData['name'], types.ascii("Galaxy Coin"));
         assertEquals(tokenData['symbol'], types.ascii("GLXY"));
 
         // Check by creator
-        const byCreator = chain.callReadOnlyFn('token-factory', 'get-tokens-by-creator', [types.principal(wallet1.address)], deployer.address);
+        const byCreator = chain.callReadOnlyFn('token-factory-v-i2', 'get-tokens-by-creator', [types.principal(wallet1.address)], deployer.address);
         const list = byCreator.result.expectOk().expectList();
         assertEquals(list.length, 1);
     }
 });
 
 Clarinet.test({
-    name: "token-factory: insufficient fee is rejected",
+    name: "token-factory-v-i2: insufficient fee is rejected",
     async fn(chain: Chain, accounts: Map<string, Account>) {
         const wallet1 = accounts.get('wallet_1')!;
         const deployer = accounts.get('deployer')!;
 
         // First raise the fee so wallet1 can't pay it with default balance trick
         chain.mineBlock([
-            Tx.contractCall('token-factory', 'set-creation-fee', [types.uint(999_999_999_999)], deployer.address)
+            Tx.contractCall('token-factory-v-i2', 'set-creation-fee', [types.uint(999_999_999_999)], deployer.address)
         ]);
 
         // wallet1 tries to create a token — will fail because wallet doesn't have 999999 STX
         const block = chain.mineBlock([
-            Tx.contractCall('token-factory', 'create-token', [
+            Tx.contractCall('token-factory-v-i2', 'create-token', [
                 types.ascii("Broke Token"),
                 types.ascii("BRK"),
                 types.uint(6),
@@ -72,43 +72,43 @@ Clarinet.test({
 });
 
 Clarinet.test({
-    name: "token-factory: multiple tokens track correctly per creator",
+    name: "token-factory-v-i2: multiple tokens track correctly per creator",
     async fn(chain: Chain, accounts: Map<string, Account>) {
         const deployer = accounts.get('deployer')!;
         const wallet1 = accounts.get('wallet_1')!;
 
         // Create 3 tokens
         chain.mineBlock([
-            Tx.contractCall('token-factory', 'create-token', [
+            Tx.contractCall('token-factory-v-i2', 'create-token', [
                 types.ascii("Alpha"), types.ascii("ALPH"), types.uint(6), types.uint(1_000)
             ], wallet1.address),
-            Tx.contractCall('token-factory', 'create-token', [
+            Tx.contractCall('token-factory-v-i2', 'create-token', [
                 types.ascii("Beta"), types.ascii("BETA"), types.uint(6), types.uint(2_000)
             ], wallet1.address),
-            Tx.contractCall('token-factory', 'create-token', [
+            Tx.contractCall('token-factory-v-i2', 'create-token', [
                 types.ascii("Gamma"), types.ascii("GAMM"), types.uint(6), types.uint(3_000)
             ], wallet1.address),
         ]);
 
-        const count = chain.callReadOnlyFn('token-factory', 'get-token-count', [], deployer.address);
+        const count = chain.callReadOnlyFn('token-factory-v-i2', 'get-token-count', [], deployer.address);
         count.result.expectOk().expectUint(3);
 
-        const byCreator = chain.callReadOnlyFn('token-factory', 'get-tokens-by-creator', [types.principal(wallet1.address)], deployer.address);
+        const byCreator = chain.callReadOnlyFn('token-factory-v-i2', 'get-tokens-by-creator', [types.principal(wallet1.address)], deployer.address);
         const list = byCreator.result.expectOk().expectList();
         assertEquals(list.length, 3);
 
-        const creatorCount = chain.callReadOnlyFn('token-factory', 'get-token-count-by-creator', [types.principal(wallet1.address)], deployer.address);
+        const creatorCount = chain.callReadOnlyFn('token-factory-v-i2', 'get-token-count-by-creator', [types.principal(wallet1.address)], deployer.address);
         creatorCount.result.expectOk().expectUint(3);
     }
 });
 
 Clarinet.test({
-    name: "token-factory: set-creation-fee only callable by owner",
+    name: "token-factory-v-i2: set-creation-fee only callable by owner",
     async fn(chain: Chain, accounts: Map<string, Account>) {
         const wallet1 = accounts.get('wallet_1')!;
 
         const block = chain.mineBlock([
-            Tx.contractCall('token-factory', 'set-creation-fee', [
+            Tx.contractCall('token-factory-v-i2', 'set-creation-fee', [
                 types.uint(9_000_000)
             ], wallet1.address)
         ]);
@@ -118,14 +118,14 @@ Clarinet.test({
 });
 
 Clarinet.test({
-    name: "token-factory: set-fee-recipient only callable by owner",
+    name: "token-factory-v-i2: set-fee-recipient only callable by owner",
     async fn(chain: Chain, accounts: Map<string, Account>) {
         const deployer = accounts.get('deployer')!;
         const wallet1 = accounts.get('wallet_1')!;
 
         // Owner updates fee recipient
         const block1 = chain.mineBlock([
-            Tx.contractCall('token-factory', 'set-fee-recipient', [
+            Tx.contractCall('token-factory-v-i2', 'set-fee-recipient', [
                 types.principal(wallet1.address)
             ], deployer.address)
         ]);
@@ -133,7 +133,7 @@ Clarinet.test({
 
         // Non-owner attempts
         const block2 = chain.mineBlock([
-            Tx.contractCall('token-factory', 'set-fee-recipient', [
+            Tx.contractCall('token-factory-v-i2', 'set-fee-recipient', [
                 types.principal(deployer.address)
             ], wallet1.address)
         ]);
@@ -142,31 +142,31 @@ Clarinet.test({
 });
 
 Clarinet.test({
-    name: "token-factory: transfer-ownership works correctly",
+    name: "token-factory-v-i2: transfer-ownership works correctly",
     async fn(chain: Chain, accounts: Map<string, Account>) {
         const deployer = accounts.get('deployer')!;
         const wallet1 = accounts.get('wallet_1')!;
 
         const block = chain.mineBlock([
-            Tx.contractCall('token-factory', 'transfer-ownership', [
+            Tx.contractCall('token-factory-v-i2', 'transfer-ownership', [
                 types.principal(wallet1.address)
             ], deployer.address)
         ]);
 
         block.receipts[0].result.expectOk().expectBool(true);
 
-        const owner = chain.callReadOnlyFn('token-factory', 'get-owner', [], deployer.address);
+        const owner = chain.callReadOnlyFn('token-factory-v-i2', 'get-owner', [], deployer.address);
         owner.result.expectOk().expectPrincipal(wallet1.address);
     }
 });
 
 Clarinet.test({
-    name: "token-factory: invalid name is rejected",
+    name: "token-factory-v-i2: invalid name is rejected",
     async fn(chain: Chain, accounts: Map<string, Account>) {
         const wallet1 = accounts.get('wallet_1')!;
 
         const block = chain.mineBlock([
-            Tx.contractCall('token-factory', 'create-token', [
+            Tx.contractCall('token-factory-v-i2', 'create-token', [
                 types.ascii(""),  // empty name
                 types.ascii("SYM"),
                 types.uint(6),
@@ -182,11 +182,11 @@ Clarinet.test({
 });
 
 Clarinet.test({
-    name: "token-factory: get-contract-info returns correct state",
+    name: "token-factory-v-i2: get-contract-info returns correct state",
     async fn(chain: Chain, accounts: Map<string, Account>) {
         const deployer = accounts.get('deployer')!;
 
-        const info = chain.callReadOnlyFn('token-factory', 'get-contract-info', [], deployer.address);
+        const info = chain.callReadOnlyFn('token-factory-v-i2', 'get-contract-info', [], deployer.address);
         const data = info.result.expectOk().expectTuple();
         assertEquals(data['token-count'], types.uint(0));
         assertEquals(data['creation-fee'], types.uint(1_000_000));

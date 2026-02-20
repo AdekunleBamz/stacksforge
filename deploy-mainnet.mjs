@@ -24,20 +24,16 @@ const EPOCH = ClarityVersion.Clarity2;
 
 const CONTRACTS = [
     {
-        name: "sip-010-trait-ft-standard",
-        path: "contracts/traits/sip-010-trait.clar",
+        name: "sip-010-trait-ft-standard-v-i2",
+        path: "contracts/traits/sip-010-trait-v-i2.clar",
         clarityVersion: EPOCH,
     },
     {
-        name: "forge-token",
-        path: "contracts/forge-token.clar",
+        name: "forge-token-v-i2",
+        path: "contracts/forge-token-v-i2.clar",
         clarityVersion: EPOCH,
     },
-    {
-        name: "token-factory",
-        path: "contracts/token-factory.clar",
-        clarityVersion: EPOCH,
-    },
+
 ];
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
@@ -179,11 +175,7 @@ async function main() {
     writeFileSync(outPath, JSON.stringify(record, null, 2));
     console.log(`📄 Deployment record written to ${outPath}`);
 
-    const factory = results.find((r) => r.name === "token-factory");
-    if (factory?.status === "OK") {
-        console.log(`\n🎉 Factory live: ${factory.principal}`);
-        console.log(`   Set NEXT_PUBLIC_FACTORY_ADDRESS=${factory.principal} in frontend/.env.local`);
-    }
+    console.log(`\n🎉 Deployment finished! Validating contracts...`);
 }
 
 main().catch((err) => {

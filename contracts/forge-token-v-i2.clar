@@ -1,9 +1,7 @@
 ;; StacksForge Token Contract
 ;; SIP-010 Fungible Token implementation for tokens created via StacksForge
 ;; Uses @stacks/connect and @stacks/transactions on the frontend
-
-(impl-trait .sip-010-trait-ft-standard.sip-010-trait)
-
+(impl-trait .sip-010-trait-ft-standard-v-i2.sip-010-trait)
 ;; ============================================================
 ;; Error constants
 ;; ============================================================
@@ -18,7 +16,7 @@
 ;; ============================================================
 
 ;; The SIP-010 fungible token  
-(define-fungible-token forge-token)
+(define-fungible-token forge-token-v-i2)
 
 ;; Token metadata
 (define-data-var token-name       (string-ascii 32)  "ForgeToken")
@@ -46,7 +44,7 @@
     (asserts! (> amount u0)                   ERR-INVALID-AMOUNT)
     (asserts! (is-eq tx-sender sender)        ERR-UNAUTHORIZED)
     (asserts! (not (is-eq sender recipient))  ERR-INVALID-RECIPIENT)
-    (try! (ft-transfer? forge-token amount sender recipient))
+    (try! (ft-transfer? forge-token-v-i2 amount sender recipient))
     (match memo m (begin (print m) true) true)
     (print {
       event:     "token-transfer",
@@ -75,12 +73,12 @@
 
 ;; Get token balance for a principal
 (define-read-only (get-balance (account principal))
-  (ok (ft-get-balance forge-token account))
+  (ok (ft-get-balance forge-token-v-i2 account))
 )
 
 ;; Get total supply
 (define-read-only (get-total-supply)
-  (ok (ft-get-supply forge-token))
+  (ok (ft-get-supply forge-token-v-i2))
 )
 
 ;; Get token URI
@@ -105,7 +103,7 @@
     (var-set token-symbol   symbol)
     (var-set token-decimals decimals)
     (var-set factory-address (some tx-sender))
-    (try! (ft-mint? forge-token supply owner))
+    (try! (ft-mint? forge-token-v-i2 supply owner))
     (print {
       event:           "token-initialized",
       name:            name,
@@ -124,7 +122,7 @@
   (begin
     (asserts! (is-eq tx-sender sender) ERR-UNAUTHORIZED)
     (asserts! (> amount u0)            ERR-INVALID-AMOUNT)
-    (try! (ft-burn? forge-token amount sender))
+    (try! (ft-burn? forge-token-v-i2 amount sender))
     (print {
       event:  "token-burned",
       burner: sender,
@@ -139,7 +137,7 @@
   (begin
     (asserts! (is-eq tx-sender (var-get contract-owner)) ERR-NOT-OWNER)
     (asserts! (> amount u0) ERR-INVALID-AMOUNT)
-    (try! (ft-mint? forge-token amount recipient))
+    (try! (ft-mint? forge-token-v-i2 amount recipient))
     (print {
       event:     "token-minted",
       recipient: recipient,
@@ -193,7 +191,7 @@
     name:          (var-get token-name),
     symbol:        (var-get token-symbol),
     decimals:      (var-get token-decimals),
-    total-supply:  (ft-get-supply forge-token),
+    total-supply:  (ft-get-supply forge-token-v-i2),
     owner:         (var-get contract-owner),
     factory:       (var-get factory-address),
     created-at:    (var-get created-at-block)
