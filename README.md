@@ -4,6 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-orange.svg)](./LICENSE)
 [![Stacks](https://img.shields.io/badge/Network-Stacks%20Mainnet-5546FF)](https://stacks.co)
+[![CI](https://github.com/AdekunleBamz/stacksforge/actions/workflows/ci.yml/badge.svg)](https://github.com/AdekunleBamz/stacksforge/actions/workflows/ci.yml)
 [![SIP-010](https://img.shields.io/badge/Standard-SIP--010-orange)](https://github.com/stacksgov/sips)
 [![@stacks/connect](https://img.shields.io/badge/%40stacks%2Fconnect-v7-brightgreen)](https://github.com/hirosystems/connect)
 [![@stacks/transactions](https://img.shields.io/badge/%40stacks%2Ftransactions-v6-blue)](https://github.com/hirosystems/stacks.js)
