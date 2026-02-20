@@ -21,6 +21,7 @@ import {
 } from '@stacks/transactions';
 import { StacksMainnet } from '@stacks/network';
 import { useWallet } from '@/contexts/WalletContext';
+import { trackEvent } from '@/lib/analytics';
 
 const FACTORY_ADDRESS = process.env.NEXT_PUBLIC_FACTORY_ADDRESS ?? '';
 const [CONTRACT_ADDRESS, CONTRACT_NAME] = FACTORY_ADDRESS.split('.');
