@@ -4,6 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-orange.svg)](./LICENSE)
 [![Stacks](https://img.shields.io/badge/Network-Stacks%20Mainnet-5546FF)](https://stacks.co)
+[![CI](https://github.com/AdekunleBamz/stacksforge/actions/workflows/ci.yml/badge.svg)](https://github.com/AdekunleBamz/stacksforge/actions/workflows/ci.yml)
 [![SIP-010](https://img.shields.io/badge/Standard-SIP--010-orange)](https://github.com/stacksgov/sips)
 [![@stacks/connect](https://img.shields.io/badge/%40stacks%2Fconnect-v7-brightgreen)](https://github.com/hirosystems/connect)
 [![@stacks/transactions](https://img.shields.io/badge/%40stacks%2Ftransactions-v6-blue)](https://github.com/hirosystems/stacks.js)
@@ -14,14 +15,30 @@
 
 - ⚡ **Instant Deployment** — Create a SIP-010 token in seconds
 - 💰 **Low Cost** — Only 1 STX creation fee
-- 🎨 **Beautiful UI** — Dark, forge-themed interface with glassmorphism
-- 🔗 **100% On-chain** — All token data stored in Clarity contracts
+- 🎨 **Beautiful UI** — Dark, forge-themed glassmorphism design
+- 🔍 **SEO Optimized** — Metatags, sitemap, and OpenGraph support
+- ♿ **Accessible** — WCAG compliant with high contrast & screen reader support
 - 🔒 **Non-custodial** — Your wallet, your keys, your tokens
 - 🌐 **Stacks Native** — Uses `@stacks/connect` and `@stacks/transactions`
 
 ---
 
+
+## 🏗️ Architecture
+
+```mermaid
+graph TD
+    User[User Wallet] -->|SIP-010 Transaction| Frontend[Next.js App]
+    Frontend -->|@stacks/connect| Wallet[Leather / Xverse]
+    Wallet -->|Sign & Broadcast| Stacks[Stacks Blockchain]
+    Stacks -->|Execute| Contracts[Clarity Contracts]
+    Contracts -->|Store State| ChainState[On-chain State]
+    Frontend -->|Read State| API[Stacks API]
+    API -->|Query| ChainState
+```
+
 ## 🏗️ Project Structure
+
 
 ```
 stacksforge/
@@ -100,7 +117,26 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+
 ---
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+**1. Wallet connection fails**
+- Ensure you have the [Leather](https://leather.io) or [Xverse](https://www.xverse.app) browser extension installed.
+- Check if you are on the correct network (Mainnet vs Testnet).
+
+**2. Transaction pending for too long**
+- The network might be congested. You can increase the fee in your wallet when signing.
+- Check the [Stacks Explorer](https://explorer.hiro.so) for network status.
+
+**3. "Contract not found" error**
+- Verify the `NEXT_PUBLIC_FACTORY_ADDRESS` in your `.env.local` matches the deployed contract address.
+
+---
+
 
 ## 📡 Stacks Libraries
 
@@ -182,13 +218,21 @@ console.log(cvToJSON(result).value); // e.g. "42"
 DEPLOYER_PRIVATE_KEY=your_private_key_here
 ```
 
+
 ### Frontend (`frontend/.env.local`)
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `NEXT_PUBLIC_FACTORY_ADDRESS` | The contract address of the deployed Token Factory | `SP2...` |
+| `NEXT_PUBLIC_STACKS_NETWORK` | The network to connect to (mainnet/testnet) | `mainnet` |
+| `NEXT_PUBLIC_APP_URL` | The canonical URL of your application | `https://stacksforge.xyz` |
 
 ```env
 NEXT_PUBLIC_FACTORY_ADDRESS=SP2xxx.token-factory
 NEXT_PUBLIC_STACKS_NETWORK=mainnet
 NEXT_PUBLIC_APP_URL=https://stacksforge.xyz
 ```
+
 
 ---
 
@@ -229,9 +273,27 @@ See [SECURITY.md](./SECURITY.md) for responsible disclosure policy.
 
 Contributions are welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
+
+---
+
+## 🛠️ Development Workflow
+
+1.  **Branching**: Use `feat/` for new features and `fix/` for bug fixes.
+2.  **Commits**: Follow conventional commits (e.g., `feat: add new token type`).
+3.  **PRs**: Open a Pull Request for review before merging to `main`.
+
+---
+
+## 🙏 Acknowledgements
+
+- [Stacks Foundation](https://stacks.org) for the ecosystem support.
+- [Hiro Systems](https://www.hiro.so) for the developer tools.
+- [Next.js](https://nextjs.org) for the framework.
+
 ---
 
 ## 📄 License
+
 
 MIT License — see [LICENSE](./LICENSE).
 

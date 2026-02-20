@@ -32,12 +32,21 @@ export const metadata: Metadata = {
         siteName: 'StacksForge',
         locale: 'en_US',
         type: 'website',
+        images: [
+            {
+                url: '/og-image.png',
+                width: 1200,
+                height: 630,
+                alt: 'StacksForge Preview',
+            },
+        ],
     },
     twitter: {
         card: 'summary_large_image',
         title: 'StacksForge',
         description: 'Deploy SIP-010 tokens on Stacks mainnet in seconds.',
         creator: '@StacksForge',
+        images: ['/og-image.png'],
     },
     viewport: {
         width: 'device-width',

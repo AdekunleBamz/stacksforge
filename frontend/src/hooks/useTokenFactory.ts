@@ -25,6 +25,14 @@ import { useWallet } from '@/contexts/WalletContext';
 const FACTORY_ADDRESS = process.env.NEXT_PUBLIC_FACTORY_ADDRESS ?? '';
 const [CONTRACT_ADDRESS, CONTRACT_NAME] = FACTORY_ADDRESS.split('.');
 
+function mapError(err: any): string {
+    const msg = err?.message || String(err);
+    if (msg.includes('User denied')) return 'Transaction cancelled by user';
+    if (msg.includes('Not enough funds')) return 'Insufficient STX balance';
+    if (msg.includes('404')) return 'Contract not found';
+    return msg;
+}
+
 export interface TokenInfo {
     tokenId: number;
     name: string;
@@ -119,6 +127,8 @@ export function useTokenFactory() {
 
     const createToken = useCallback(async (params: CreateTokenParams): Promise<void> => {
         if (!address) throw new Error('Wallet not connected');
+        if (!params.name || !params.symbol) throw new Error('Invalid token details');
+        if (params.supply <= 0n) throw new Error('Supply must be positive');
 
         setLoading(true);
         setError(null);
@@ -148,13 +158,16 @@ export function useTokenFactory() {
                     setLoading(false);
                 },
                 onCancel: () => {
+                    setError('Transaction cancelled');
                     setLoading(false);
                 },
             };
 
             await openContractCall(options);
         } catch (err: any) {
-            setError(err.message ?? 'Unknown error');
+            const msg = mapError(err);
+            setError(msg);
+            trackEvent('forge_token_error', { error: msg, originalError: err.message });
             setLoading(false);
         }
     }, [address, net, getCreationFee]);

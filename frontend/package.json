@@ -1,13 +1,14 @@
 {
     "name": "stacksforge-frontend",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "private": true,
     "description": "StacksForge — Deploy SIP-010 tokens on Stacks in seconds",
     "scripts": {
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "next lint",
+        "test": "echo \"No tests specified\" && exit 0"
     },
     "dependencies": {
         "@stacks/auth": "^6.13.0",
@@ -24,6 +25,9 @@
         "@types/node": "^20",
         "@types/react": "^18",
         "@types/react-dom": "^18",
+        "@testing-library/react": "^14.0.0",
+        "jsdom": "^22.1.0",
+        "vitest": "^0.34.0",
         "eslint": "^8",
         "eslint-config-next": "14.2.3",
         "typescript": "^5"
