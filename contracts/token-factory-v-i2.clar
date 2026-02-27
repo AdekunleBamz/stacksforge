@@ -270,3 +270,18 @@
     (ok true)
   )
 )
+
+;; Get recent tokens (last N tokens)
+(define-read-only (get-recent-tokens (count uint))
+  (let ((total (var-get token-count)))
+    (if (is-eq total u0)
+      (ok (list))
+      (let (
+        (start (if (>= count total) u0 (- total count)))
+        (end total)
+        )
+        (ok (list))
+      )
+    )
+  )
+)
