@@ -10,6 +10,9 @@
 (define-constant ERR-INSUFFICIENT-FUNDS  (err u102))
 (define-constant ERR-INVALID-AMOUNT      (err u103))
 (define-constant ERR-INVALID-RECIPIENT   (err u104))
+(define-constant ERR-CONTRACT-PAUSED     (err u105))
+(define-constant ERR-SUPPLY-CAP-EXCEEDED (err u106))
+(define-constant ERR-ZERO-ADDRESS        (err u107))
 
 ;; ============================================================
 ;; Token data variables
@@ -29,6 +32,8 @@
 (define-data-var factory-address  (optional principal) none)
 (define-data-var created-at-block uint               block-height)
 (define-data-var token-id         uint               u0)
+(define-data-var is-paused        bool               false)
+(define-data-var supply-cap       uint               u0)
 
 ;; ============================================================
 ;; SIP-010 Trait Implementation
@@ -196,4 +201,47 @@
     factory:       (var-get factory-address),
     created-at:    (var-get created-at-block)
   })
+)
+
+;; ============================================================
+;; Pause / Emergency Functions
+;; ============================================================
+
+;; Pause the contract (owner only)
+(define-public (pause)
+  (begin
+    (asserts! (is-eq tx-sender (var-get contract-owner)) ERR-NOT-OWNER)
+    (var-set is-paused true)
+    (print { event: "contract-paused" })
+    (ok true)
+  )
+)
+
+;; Unpause the contract (owner only)
+(define-public (unpause)
+  (begin
+    (asserts! (is-eq tx-sender (var-get contract-owner)) ERR-NOT-OWNER)
+    (var-set is-paused false)
+    (print { event: "contract-unpaused" })
+    (ok true)
+  )
+)
+
+;; Get pause status
+(define-read-only (get-paused)
+  (ok (var-get is-paused))
+)
+
+;; Set supply cap
+(define-public (set-supply-cap (cap uint))
+  (begin
+    (asserts! (is-eq tx-sender (var-get contract-owner)) ERR-NOT-OWNER)
+    (var-set supply-cap cap)
+    (ok true)
+  )
+)
+
+;; Get supply cap
+(define-read-only (get-supply-cap)
+  (ok (var-get supply-cap))
 )
