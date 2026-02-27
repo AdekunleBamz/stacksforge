@@ -259,3 +259,14 @@
     )
   )
 )
+
+;; Withdraw collected fees
+(define-public (withdraw-fees (amount uint))
+  (begin
+    (asserts! (is-eq tx-sender (var-get contract-owner)) ERR-NOT-OWNER)
+    (try! (stx-transfer? amount (var-get contract-owner) tx-sender))
+    (var-set total-fees-collected (- (var-get total-fees-collected) amount))
+    (print { event: "fees-withdrawn", amount: amount })
+    (ok true)
+  )
+)
