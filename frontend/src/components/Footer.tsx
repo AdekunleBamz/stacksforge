@@ -1,0 +1,90 @@
+'use client';
+
+import Link from 'next/link';
+import { Flame, Github, Twitter, Heart, ArrowUp } from 'lucide-react';
+
+export function Footer() {
+    const currentYear = new Date().getFullYear();
+
+    return (
+        <footer className="footer">
+            <div className="footer-content">
+                <div className="footer-brand">
+                    <div className="flex items-center gap-2 mb-2">
+                        <Flame size={24} className="text-primary" />
+                        <span className="font-bold text-xl">StacksForge</span>
+                    </div>
+                    <p className="footer-desc">
+                        The easiest way to forge SIP-010 fungible tokens on the Stacks blockchain. No code required.
+                    </p>
+                    <div className="mt-4">
+                        <h4 className="text-sm font-semibold mb-2">Stay Updated</h4>
+                        <div className="flex gap-2">
+                            <input
+                                type="email"
+                                placeholder="Enter your email"
+                                className="px-3 py-1.5 rounded bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-primary"
+                            />
+                            <button className="px-3 py-1.5 rounded bg-primary text-white text-sm hover:bg-primary-dark transition-colors">
+                                Subscribe
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="footer-links">
+                    <div className="link-column">
+                        <h4>Product</h4>
+                        <Link href="#forge">Forge Token</Link>
+                        <Link href="#tokens">Explorer</Link>
+                        <Link href="/sitemap.xml">Sitemap</Link>
+                    </div>
+                    <div className="link-column">
+                        <h4>Resources</h4>
+                        <a href="https://docs.stacks.co" target="_blank" rel="noopener noreferrer">Stacks Docs</a>
+                        <a href="https://explorer.hiro.so" target="_blank" rel="noopener noreferrer">Hiro Explorer</a>
+                        <a href="https://leather.io" target="_blank" rel="noopener noreferrer">Leather Wallet</a>
+                    </div>
+                    <div className="link-column">
+                        <h4>Community</h4>
+                        <a href="https://github.com/AdekunleBamz/stacksforge" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                            <Github size={14} /> GitHub
+                        </a>
+                        <a href="https://twitter.com/Stacks" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                            <Twitter size={14} /> Twitter
+                        </a>
+                        <a href="https://discord.gg/stacks" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                            <span className="text-xs">👾</span> Discord
+                        </a>
+                    </div>
+                    <div className="link-column">
+                        <h4>Legal</h4>
+                        <Link href="/privacy">Privacy Policy</Link>
+                        <Link href="/terms">Terms of Service</Link>
+                        <Link href="/disclaimer">Disclaimer</Link>
+                    </div>
+                </div>
+            </div>
+
+            <div className="footer-bottom">
+                <p>&copy; {currentYear} StacksForge. All rights reserved.</p>
+                <div className="made-with">
+                    <span>Made with</span>
+                    <Heart size={14} className="heart-icon" fill="currentColor" />
+                    <span>on Stacks</span>
+                </div>
+                <div className="social-icons">
+                    <a href="https://github.com/AdekunleBamz/stacksforge" aria-label="GitHub"><Github size={20} /></a>
+                    <a href="https://twitter.com/Stacks" aria-label="Twitter"><Twitter size={20} /></a>
+                </div>
+                <button
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                    className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors"
+                    aria-label="Back to top"
+                >
+                    <ArrowUp size={20} />
+                </button>
+            </div>
+        </footer>
+    );
+}
