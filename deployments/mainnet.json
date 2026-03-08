@@ -1,0 +1,16 @@
+{
+    "network": "mainnet",
+    "deployer": "SP5K2RHMSBH4PAP4PGX77MCVNK1ZEED07CWX9TJT",
+    "feeRecipient": "SP5K2RHMSBH4PAP4PGX77MCVNK1ZEED07CWX9TJT",
+    "timestamp": "2026-02-20T13:11:57.432Z",
+    "contracts": {
+        "sip-010-trait-ft-standard-v-i2": {
+            "txid": "d70df809ae678478a479716fbe7d846c014019dbd47d85de1c98ba7ceb8ae43a",
+            "principal": "SP5K2RHMSBH4PAP4PGX77MCVNK1ZEED07CWX9TJT.sip-010-trait-ft-standard-v-i2"
+        },
+        "forge-token-v-i2": {
+            "txid": "20015bc4d568e214f532668f0647a1ad23ca66fa0c14cf9c1dbe6beb97253c94",
+            "principal": "SP5K2RHMSBH4PAP4PGX77MCVNK1ZEED07CWX9TJT.forge-token-v-i2"
+        }
+    }
+}
